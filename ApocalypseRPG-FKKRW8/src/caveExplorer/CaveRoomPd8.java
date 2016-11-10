@@ -172,6 +172,11 @@ public class CaveRoomPd8 {
 				break;
 			}
 		}
+		
+		goToRoom(indexFound);
+	}
+
+	private void goToRoom(int indexFound) throws InterruptedException {
 		if (borderingRooms[indexFound] != null && 
 				doors[indexFound].isOpen()) {
 			CaveExplorer.currentRoom.leave();
@@ -179,6 +184,7 @@ public class CaveRoomPd8 {
 			CaveExplorer.currentRoom.enter();
 			CaveExplorer.inventory.updateMap();
 		}
+		
 	}
 
 	private static boolean isValid(String input) {
