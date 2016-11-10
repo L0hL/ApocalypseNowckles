@@ -20,7 +20,7 @@ public class MnswprFrKo8 {
 		
 //		System.out.println((char)(65));
 		
-		boolean[][] mines = new boolean[12][12];
+		boolean[][] mines = new boolean[120][120];
 		plantMines(mines, 30);
 //		
 		String[][] field = createField(mines);
