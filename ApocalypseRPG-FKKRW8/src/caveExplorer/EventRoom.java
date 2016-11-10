@@ -5,8 +5,8 @@ public class EventRoom extends CaveRoomPd8 {
 	private boolean eventHappened;
 	private Playable event;
 	
-	public EventRoom(String description, Playable event) {
-		super(description);
+	public EventRoom(String description, boolean exists, Playable event) {
+		super(description, exists);
 		eventHappened = false;
 		this.event = event;
 	}

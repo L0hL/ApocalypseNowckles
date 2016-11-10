@@ -1,9 +1,17 @@
 package caveExplorer;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiUnavailableException;
+
 public class InventoryNockles {
 	
 	private boolean hasMap;
 	private String map;
+	
+	public static final int NORTH = 0;
+	public static final int EAST = 1;
+	public static final int SOUTH = 2;
+	public static final int WEST = 3;
 
 	public InventoryNockles() {
 		hasMap = true;
@@ -50,6 +58,30 @@ public class InventoryNockles {
 		}
 		
 //		System.out.print(map);
+	}
+	
+	public void updateMapLP() {
+		
+	}
+	
+	public static void printAdjLP(int[] center, boolean[][] dirs) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
+		Launchpad.display(Launchpad.launchpad, center, 21, "blink");
+		
+		int[][] modPxls = {
+				{center[0]-1, center[1]}, //NORTH
+				{center[0], center[1]+1}, //EAST
+				{center[0]+1, center[1]}, //SOUTH
+				{center[0], center[1]-1}, //WEST
+		};
+		
+		for (int i = 0; i < dirs[0].length; i++) {
+			if (dirs[0][i]) {
+				Launchpad.display(Launchpad.launchpad, modPxls[i], 3, "solid");
+			}
+			else if (dirs[1][i]) {
+				Launchpad.display(Launchpad.launchpad, modPxls[i], 5, "solid");
+			}
+		}
 	}
 
 	public String getDescription() {

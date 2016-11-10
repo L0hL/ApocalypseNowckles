@@ -3,9 +3,16 @@ package caveExplorer;
 public class CaveRoomPd8 {
 
 	private String description;
+	private boolean exists;
 	private String directions;
+	private boolean[] directionsLP;
 	private String contents;
 	private String defaultContents;
+	
+	public int row;
+	public int col;
+	
+	public static final int NUM_DIRECTIONS = 4;
 
 	private CaveRoomPd8[] borderingRooms;
 	private Door[] doors; 
@@ -16,10 +23,20 @@ public class CaveRoomPd8 {
 	public static final int WEST = 3;
 
 
-	public CaveRoomPd8(String description){
+	public CaveRoomPd8(String description, boolean exists){
 		this.description = description;
+		this.exists = exists;
 		setDefaultContents(" ");
 		contents = defaultContents;
+		
+		for (int i = 0; i < CaveExplorer.caves.length; i++) {
+			for (int j = 0; j < CaveExplorer.caves[i].length; j++) {
+				if (CaveExplorer.caves[i][j] == this) {
+					this.row = i;
+					this.col = j;
+				}
+			}
+		}
 
 		borderingRooms = new CaveRoomPd8[4];
 		doors = new Door[4];
@@ -29,7 +46,22 @@ public class CaveRoomPd8 {
 		}
 		setDirections();
 	}
-
+	
+	public boolean[][] getAdjRooms() {
+		boolean[] dirsOpen = new boolean[NUM_DIRECTIONS];
+		for (int i = 0; i < dirsOpen.length; i++) {
+			dirsOpen[i] = (getDoor(i) != null && getDoor(i).isOpen());
+			System.out.println(dirsOpen[i]);
+		}
+		boolean[] dirsLocked = new boolean[NUM_DIRECTIONS];
+		for (int i = 0; i < dirsOpen.length; i++) {
+			dirsLocked[i] = (getDoor(i) != null && !getDoor(i).isOpen());
+			System.out.println(dirsLocked[i]);
+		}
+		boolean[][] outArr = {dirsOpen, dirsLocked};
+		return outArr;
+	}
+	
 	protected void setDirections() {
 		directions	= "";
 		if(doors[NORTH] == null && 
@@ -159,5 +191,7 @@ public class CaveRoomPd8 {
 		
 		return false;
 	}
+	
+	
 
 }

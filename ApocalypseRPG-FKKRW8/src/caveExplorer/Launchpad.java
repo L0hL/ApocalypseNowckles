@@ -32,6 +32,8 @@ public class Launchpad {
 	
 	public static final int NOTE_ON = 0x90;
 	
+	public static int lastKeyPressed = 0;
+	
 	static MidiDevice launchpad;
 	static MidiDevice launchpadIn;
 	static Receiver nrec;
@@ -58,7 +60,7 @@ public class Launchpad {
 		for (int i = 0; i < infosA.length; i++) {
 			Info inf = infosA[i];
 			String name = inf.getName().replace(" ", "");
-			System.out.println("\"" + name + "\"");
+//			System.out.println("\"" + name + "\"");
 			if (name.equals(displaysAs)) {
 				launchpadDeviceNumber = i;
 			}
@@ -67,7 +69,7 @@ public class Launchpad {
 		for (int i = 0; i < infosA.length; i++) {
 			Info inf = infosA[i];
 			String name = inf.getName().replace(" ", "");
-			System.out.println("\"" + name + "\"");
+//			System.out.println("\"" + name + "\"");
 			if (name.equals(displaysAs)) {
 				launchpadInNumber = i;
 				break;
@@ -87,35 +89,38 @@ public class Launchpad {
 		ntra = launchpadIn.getTransmitter();
 		
 		
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				int[] coordsArr = {i, j};
-				display(launchpad, coordsArr, 79, "solid");
-				Thread.sleep(2);
-			}
-		}
-		int[][] pixelsssss = {
-				{0,1},
-				{1,1},
-				{1,3},
-				{2,1},
-				{2,2},
-				{2,3},
-				{2,4},
-				};
-//		display(launchpad, pixelsssss, 3, "solid");
+//		for (int i = 0; i < 8; i++) {
+//			for (int j = 0; j < 8; j++) {
+//				int[] coordsArr = {i, j};
+//				display(launchpad, coordsArr, 79, "solid");
+//				Thread.sleep(2);
+//			}
+//		}
+//		int[][] pixelsssss = {
+//				{0,1},
+//				{1,1},
+//				{1,3},
+//				{2,1},
+//				{2,2},
+//				{2,3},
+//				{2,4},
+//				};
+////		display(launchpad, pixelsssss, 3, "solid");
+//		
+//		long[] times = {250, 250, 250, 250, 250, 250};
+//		
+//		flashImg(launchpad, pixelsssss, GREEN, times, 0, 20, true);
+//		
+//			
+//		
+//		Thread.sleep(2000);
+//		
+//		clearPads(launchpad, 0, 20);
+//		
+//		System.exit(0);
+		Thread.yield();
 		
-		long[] times = {250, 250, 250, 250, 250, 250};
-		
-		flashImg(launchpad, pixelsssss, GREEN, times, 0, 20, true);
-		
-			
-		
-		Thread.sleep(2000);
-		
-		clearPads(launchpad, 0, 20);
-		
-		System.exit(0);
+//		getInput();
 	}
 	
 	
@@ -205,7 +210,7 @@ public class Launchpad {
 				
 				int[] pxl = {i, j};
 
-				changePixel(device, pxl, FLASH, 0);
+				changePixel(device, pxl, FLASH, 1);
 				changePixel(device, pxl, PULSE, 0);
 				changePixel(device, pxl, SOLID, 0);
 
@@ -235,7 +240,8 @@ public class Launchpad {
 		// Bind the transmitter to the receiver so the receiver gets input from the transmitter
 		transmitter.setReceiver(receiver);
 		
-		while(true){
+		int keyPress = lastKeyPressed;
+		while(keyPress == lastKeyPressed) {
 
 			Sequence seq = new Sequence(Sequence.PPQ, 1);
 			Track currentTrack = seq.createTrack();
@@ -270,7 +276,11 @@ public class Launchpad {
 							int key = sm.getData1();
 							int velocity = sm.getData2();
 							if (velocity > 0) {
-								System.out.println(key);
+//								System.out.println(key);
+								keyPress = key;
+//								ShortMessage msg = new ShortMessage(ShortMessage.NOTE_ON, 5, key, 3);
+//								launchpad.getReceiver().send(msg, -1);
+								
 							}
 						}
 //	                    else if (sm.getCommand() == NOTE_OFF) {
@@ -282,6 +292,7 @@ public class Launchpad {
 	            }
 	        }
 		}
+		return keyPress;
 	}
 	
 	public static void flashImg(MidiDevice device, int[][] pxls, int color, long[] times, int indDelay, int rowDelay, boolean pauseAtEnd) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException{

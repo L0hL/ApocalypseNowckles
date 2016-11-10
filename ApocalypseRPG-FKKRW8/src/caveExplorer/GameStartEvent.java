@@ -18,24 +18,25 @@ public class GameStartEvent implements Playable {
 	}
 	
 	public void play() throws InterruptedException {
-		readSequence(SEQUENCE_1, 10);
+		
+		readSequence(SEQUENCE_1, 20);
 		while (CaveExplorer.in.nextLine().toLowerCase().indexOf("yes") < 0) {
-			CaveExplorer.print("C'mon! You know you like puzzles! Say yes!");
+			CaveExplorer.printDelay("C'mon! You know you like puzzles! Say yes!", 20, true);
 		}
 		readSequence(SEQUENCE_2, 10);
 		Thread.sleep(500);
 		CaveExplorer.inventory.setHasMap(true);
-		CaveExplorer.printDelay("You obtained a map!", 10);
+		CaveExplorer.printDelay("You obtained a map!", 20, true);
 		Thread.sleep(2000);
 	}
 	
 	public static void readSequence(String[] seq, long delay) throws InterruptedException{
 		for (int s = 0; s < seq.length - 1; s++) {
-			CaveExplorer.printDelay(seq[s], delay);
+			CaveExplorer.printDelay(seq[s], delay, true);
 			System.out.println("- - - press enter - - -");
 			CaveExplorer.in.nextLine();
 		}
-		CaveExplorer.printDelay(seq[seq.length - 1], delay);
+		CaveExplorer.printDelay(seq[seq.length - 1], delay, true);
 		System.out.print("\n");
 	}
 
