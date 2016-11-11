@@ -1,5 +1,3 @@
-# ApocalypseNowckles
-
 ###Apocalypse RPG###
 
 Max Friedman, Simon Kahn, Tracey Kong, Ivan Ruan, Jimmy Wu
