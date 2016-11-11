@@ -151,7 +151,7 @@ public class Launchpad {
 	static MidiDevice.Info[] infosA = MidiSystem.getMidiDeviceInfo();
 	static String displaysAs = "LivePort";
 	
-	public static void main(String[] args) throws MidiUnavailableException, InterruptedException, InvalidMidiDataException {
+	public static boolean main(String[] args) throws MidiUnavailableException, InterruptedException, InvalidMidiDataException {
 		int launchpadDeviceNumber = -1;
 		int	launchpadInNumber = -1;
 		
@@ -176,8 +176,9 @@ public class Launchpad {
 		}
 		
 		if (launchpadDeviceNumber == -1 || launchpadInNumber == 0) {
-			System.out.println("Cannot find Launchpad. Quitting.");
-			System.exit(0);
+			System.out.println("Cannot find Launchpad.");
+			return false;
+//			System.exit(0);
 		}
 		
 		System.out.println("Receiving from MIDI device " + launchpadInNumber);
@@ -222,6 +223,7 @@ public class Launchpad {
 //		
 //		System.exit(0);
 		Thread.yield();
+		return true;
 		
 //		getInput();
 	}

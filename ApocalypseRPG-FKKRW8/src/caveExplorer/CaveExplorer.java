@@ -21,18 +21,20 @@ public class CaveExplorer {
 
 		in = new Scanner(System.in);
 		
-		System.out.println("Play with Launchpad? (Y/N) ");
-		String ulpR = in.nextLine().toLowerCase();
-		while ((ulpR.indexOf("y") < 0 && ulpR.indexOf("n") < 0) || (ulpR.indexOf("y") >= 0 && ulpR.indexOf("n") >= 0)) {
-			System.out.println("Play with Launchpad? (Y/N) ");
-			ulpR = in.nextLine().toLowerCase();
-		}
+//		System.out.println("Play with Launchpad? (Y/N) ");
+//		String ulpR = in.nextLine().toLowerCase();
+//		while ((ulpR.indexOf("y") < 0 && ulpR.indexOf("n") < 0) || (ulpR.indexOf("y") >= 0 && ulpR.indexOf("n") >= 0)) {
+//			System.out.println("Play with Launchpad? (Y/N) ");
+//			ulpR = in.nextLine().toLowerCase();
+//		}
 		
-		useLaunchpadInput = (ulpR.indexOf("y") >= 0);
+//		useLaunchpadInput = (ulpR.indexOf("y") >= 0);
+		
+		useLaunchpadInput = Launchpad.main(null); 
 		
 		
 		if (useLaunchpadInput) {
-			Launchpad.main(null);
+//			Launchpad.main(null);
 			Launchpad.clearPads(Launchpad.launchpad, 0, 0);
 		}
 		
