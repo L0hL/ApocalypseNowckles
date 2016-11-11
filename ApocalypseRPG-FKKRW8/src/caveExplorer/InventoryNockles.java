@@ -65,7 +65,7 @@ public class InventoryNockles {
 	}
 	
 	public static void printAdjLP(int[] center, boolean[][] dirs) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
-		Launchpad.display(Launchpad.launchpad, center, 21, "blink");
+		Launchpad.display(Launchpad.launchpad, center, 21, "pulse");
 		
 		int[][] modPxls = {
 				{center[0]-1, center[1]}, //NORTH

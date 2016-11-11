@@ -1,5 +1,8 @@
 package caveExplorer;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiUnavailableException;
+
 public class CaveRoomPd8 {
 
 	private String description;
@@ -51,12 +54,12 @@ public class CaveRoomPd8 {
 		boolean[] dirsOpen = new boolean[NUM_DIRECTIONS];
 		for (int i = 0; i < dirsOpen.length; i++) {
 			dirsOpen[i] = (getDoor(i) != null && getDoor(i).isOpen());
-			System.out.println(dirsOpen[i]);
+//			System.out.println(dirsOpen[i]);
 		}
 		boolean[] dirsLocked = new boolean[NUM_DIRECTIONS];
 		for (int i = 0; i < dirsOpen.length; i++) {
 			dirsLocked[i] = (getDoor(i) != null && !getDoor(i).isOpen());
-			System.out.println(dirsLocked[i]);
+//			System.out.println(dirsLocked[i]);
 		}
 		boolean[][] outArr = {dirsOpen, dirsLocked};
 		return outArr;
@@ -100,7 +103,7 @@ public class CaveRoomPd8 {
 		return contents;
 	}
 
-	public void enter() throws InterruptedException{
+	public void enter() throws InterruptedException, InvalidMidiDataException, MidiUnavailableException{
 		contents = "X";
 	}
 
@@ -157,7 +160,7 @@ public class CaveRoomPd8 {
 		description = string;
 	}
 
-	public void interpretAction(String input) throws InterruptedException {
+	public void interpretAction(String input) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
 		while (!isValid(input.toLowerCase())) {
 			CaveExplorer.print("Please enter 'w', 'a', 's', or 'd'.");
 			input = CaveExplorer.in.nextLine();
@@ -176,7 +179,7 @@ public class CaveRoomPd8 {
 		goToRoom(indexFound);
 	}
 
-	private void goToRoom(int indexFound) throws InterruptedException {
+	private void goToRoom(int indexFound) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
 		if (borderingRooms[indexFound] != null && 
 				doors[indexFound].isOpen()) {
 			CaveExplorer.currentRoom.leave();

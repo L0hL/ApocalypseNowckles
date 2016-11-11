@@ -6,7 +6,9 @@ import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 
 public class CaveExplorer {
-
+	
+	public static boolean useLaunchpadInput;
+	
 	public static CaveRoomPd8[][] caves;
 	public static Scanner in;
 	public static CaveRoomPd8 currentRoom;
@@ -15,9 +17,24 @@ public class CaveExplorer {
 	protected static boolean[][] cavesHidden;
 
 	public static void main(String[] args) throws InterruptedException, MidiUnavailableException, InvalidMidiDataException {
-		Launchpad.main(null);
-		Launchpad.clearPads(Launchpad.launchpad, 0, 0);
+
 		in = new Scanner(System.in);
+		
+		System.out.println("Play with Launchpad? (Y/N) ");
+		String ulpR = in.nextLine().toLowerCase();
+		while ((ulpR.indexOf("y") < 0 && ulpR.indexOf("n") < 0) || (ulpR.indexOf("y") >= 0 && ulpR.indexOf("n") >= 0)) {
+			System.out.println("Play with Launchpad? (Y/N) ");
+			ulpR = in.nextLine().toLowerCase();
+		}
+		
+		useLaunchpadInput = (ulpR.indexOf("y") >= 0);
+		
+		
+		if (useLaunchpadInput) {
+			Launchpad.main(null);
+			Launchpad.clearPads(Launchpad.launchpad, 0, 0);
+		}
+		
 		
 		caves = new CaveRoomPd8[6][6];
 		cavesHidden = new boolean[caves.length][caves[0].length];
@@ -35,7 +52,7 @@ public class CaveExplorer {
 				caves[row][col] = new CaveRoomPd8("This room has coords " + row + ", " + col, cavesHidden[row][col]);
 			}
 		}
-
+		
 		currentRoom = caves[1][2];
 		
 		caves[1][3] = new EventRoom("This is where you found the map.", true, new GameStartEvent());
@@ -45,9 +62,7 @@ public class CaveExplorer {
 		caves[1][2].setConnection(CaveRoomPd8.SOUTH, caves[2][2], new Door());
 		caves[1][2].setConnection(CaveRoomPd8.EAST, caves[1][3], new Door());
 		
-		
 		currentRoom.getAdjRooms();
-		
 		
 		inventory = new InventoryNockles();
 		
@@ -59,31 +74,40 @@ public class CaveExplorer {
 
 	private static void startExploring() throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
 		int[] center = {1,1};
-		InventoryNockles.printAdjLP(center, currentRoom.getAdjRooms());
 		while (true) {
+			new Thread() {
+				public void run() {
+					if (useLaunchpadInput) {
+						if (!GameStartEvent.eventOccurred) {
+							try {
+								Launchpad.clearPads(Launchpad.launchpad, 0, 0);
+								InventoryNockles.printAdjLP(center, currentRoom.getAdjRooms());
+							} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+			}.start();
+			
 			print(inventory.getDescription());
 			print(currentRoom.getDescription());
-//			print("What would you like to do?");
 			
-//			printDelay(inventory.getDescription(), 1);
-//			printDelay(currentRoom.getDescription(), 10);
 			printDelay("What would you like to do?", 30, false);
 			
 			boolean inputConstant = false;
 			String inputToUse = "";
 			String input = in.nextLine();
 			System.out.print("\n");
-//			int LastKeyPressed = Launchpad.lastKeyPressed;
-//			Launchpad.getInput();
 			act(input);
-
 		}
 	}
 	
-	private static void act(String input) throws InterruptedException {
+	private static void act(String input) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
 		currentRoom.interpretAction(input);
 	}
-
+	
 	public static void print(String text) {
 		System.out.println(text);
 	}
@@ -98,5 +122,4 @@ public class CaveExplorer {
 			System.out.print("\n");
 		}
 	}
-
 }

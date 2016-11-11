@@ -1,5 +1,8 @@
 package caveExplorer;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiUnavailableException;
+
 public class EventRoom extends CaveRoomPd8 {
 
 	private boolean eventHappened;
@@ -11,7 +14,7 @@ public class EventRoom extends CaveRoomPd8 {
 		this.event = event;
 	}
 	
-	public void enter() throws InterruptedException {
+	public void enter() throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
 //		make all the normal things happen
 		super.enter();
 		if (!eventHappened) {

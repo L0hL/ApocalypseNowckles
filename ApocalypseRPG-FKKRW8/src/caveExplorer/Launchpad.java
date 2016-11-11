@@ -32,6 +32,104 @@ public class Launchpad {
 	
 	public static final int NOTE_ON = 0x90;
 	
+	
+	protected static int[][] messageOutline = {
+			{0,1},
+			{0,2},
+			{0,3},
+			{0,4},
+			{0,5},
+			{0,6},
+			{1,0},
+			{1,7},
+			{2,0},
+			{2,7},
+			{3,0},
+			{3,7},
+			{4,1},
+			{4,2},
+			{4,3},
+			{4,4},
+			{4,5},
+			{4,6},
+			{5,1},
+			{5,2},
+			{6,1}
+			};
+	
+	protected static int[][] exclamationMark = {
+			{0,3},
+			{0,4},
+			{1,3},
+			{1,4},
+			{2,3},
+			{2,4},
+			{3,3},
+			{3,4},
+			{4,3},
+			{4,4},
+			
+			{6,3},
+			{6,4},
+			{7,3},
+			{7,4},
+			};
+	
+	protected static int[][] plus6x6 = {
+			{1,3},
+			{1,4},
+			{2,3},
+			{2,4},
+
+			{3,1},
+			{3,2},
+			{3,3},
+			{3,4},
+			{3,5},
+			{3,6},
+			
+			{4,1},
+			{4,2},
+			{4,3},
+			{4,4},
+			{4,5},
+			{4,6},
+			
+			{5,3},
+			{5,4},
+			{6,3},
+			{6,4},
+			};
+
+	protected static int[][] questionMark = {
+			{0,2},
+			{0,3},
+			{0,4},
+			{0,5},
+			
+			{1,2},
+			{1,3},
+			{1,4},
+			{1,5},
+			{1,6},
+			
+			{2,5},
+			{2,6},
+			
+			{3,3},
+			{3,4},
+			{3,5},
+			{4,3},
+			{4,4},
+			{4,5},
+			{5,3},
+			{5,4},
+			
+			{7,3},
+			{7,4},
+			};
+			
+	
 	public static int lastKeyPressed = 0;
 	
 	static MidiDevice launchpad;
@@ -144,12 +242,12 @@ public class Launchpad {
 		
 		for (int i = 0; i < pxl.length; i++) {
 			
-			int channel;
+			int channel = SOLID;
 			switch (mode) {
 			case "blink": channel = FLASH;
 			case "flash": channel = FLASH;
 			case "pulse": channel = PULSE;
-			default: channel = SOLID;
+			case "solid": channel = SOLID;
 			}
 			
 			
@@ -210,7 +308,7 @@ public class Launchpad {
 				
 				int[] pxl = {i, j};
 
-				changePixel(device, pxl, FLASH, 1);
+				changePixel(device, pxl, FLASH, 0);
 				changePixel(device, pxl, PULSE, 0);
 				changePixel(device, pxl, SOLID, 0);
 
@@ -295,7 +393,7 @@ public class Launchpad {
 		return keyPress;
 	}
 	
-	public static void flashImg(MidiDevice device, int[][] pxls, int color, long[] times, int indDelay, int rowDelay, boolean pauseAtEnd) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException{
+	public static void flashImg(MidiDevice device, int[][] pxls, int color, long onTime, long offTime, int reps, int indDelayOn, int rowDelayOn, int indDelayOff, int rowDelayOff, boolean pauseAtEnd) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException{
 		int[][] sortedPixels = new int[pxls.length][2];
 		
 		int count = 0;
@@ -312,17 +410,16 @@ public class Launchpad {
 			}
 		}
 		
-		for (int i = 0; i < times.length; i++) {
-			displayDelay(device, sortedPixels, color, "solid", indDelay, rowDelay);
-			Thread.sleep(times[i]);
-			i++;
-			clearPads(device, indDelay, rowDelay);
-			if (i < times.length - 1 || pauseAtEnd) {
-				Thread.sleep(times[i]);
+		for (int i = 0; i < reps; i++) {
+			displayDelay(device, sortedPixels, color, "solid", indDelayOn, rowDelayOn);
+			Thread.sleep(onTime);
+			clearPads(device, indDelayOff, rowDelayOff);
+			if (i < reps - 1 || pauseAtEnd) {
+				Thread.sleep(offTime);
 			}
 		}
 		if(pauseAtEnd) {
-			displayDelay(device, sortedPixels, color, "solid", indDelay, rowDelay);
+			displayDelay(device, sortedPixels, color, "solid", indDelayOn, rowDelayOn);
 		}
 	}
 

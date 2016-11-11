@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Iterator;
 
-public class MnswprFrKo8 {
+public class MnswprFrKo8 implements Playable {
 
 	static String[][] arr2D;
 	static int starti;
@@ -15,25 +15,20 @@ public class MnswprFrKo8 {
 	
 	static Scanner in = new Scanner(System.in);
 	
-	public static void main(String[] args) throws InterruptedException {
-		
-		
-//		System.out.println((char)(65));
-		
-		boolean[][] mines = new boolean[120][120];
+//	
+	public void play() throws InterruptedException {
+		// TODO Auto-generated method stub
+		boolean[][] mines = new boolean[12][12];
 		plantMines(mines, 30);
 //		
 		String[][] field = createField(mines);
-//		
 		
-		grid = newGrid(8, 8);
-
 		printField(field);
-
 		
+//		startGame();
 	}
 
-	
+
 
 	private static int[] interpretInput(String input) {
 //		verify input is valid
@@ -86,63 +81,6 @@ public class MnswprFrKo8 {
 		return false;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	private static String[][] newGrid(int i, int j) {
-		int height = 3*i + 1;
-		int width = 4*j + 1;
-		
-		String[][] arr = new String[height][width];
-		
-		for (int k = 0; k < arr.length; k++) {
-			for (int k2 = 0; k2 < arr[k].length; k2++) {
-				arr[k][k2] = " ";
-			}
-		}
-		
-		for (int k = 0; k < height; k++) {
-			arr[k][0] = "|";
-		}
-		
-		for (int k = 0; k < width; k++) {
-			arr[0][k] = "_";
-		}
-		
-		for (int a = 0; a < i; a++) {
-			int topLeftY = (3 * a) + 1;
-			for (int b = 0; b < j; b++) {
-				int topLeftX = (4 * b) + 1;
-
-//				arr[topLeftY + 2][topLeftX - 1] = "_";
-				arr[topLeftY + 2][topLeftX] = "_";
-				arr[topLeftY + 2][topLeftX + 1] = "_";
-				arr[topLeftY + 2][topLeftX + 2] = "_";
-//				arr[topLeftY + 2][topLeftX + 3] = "_";
-				
-				arr[topLeftY][topLeftX + 3] = "|";
-				arr[topLeftY + 1][topLeftX + 3] = "|";
-				arr[topLeftY + 2][topLeftX + 3] = "|";
-//				arr[topLeftY + 3][topLeftX + 2] = "|";
-				
-//				arr[topLeftY][topLeftX] = "A";
-			}
-		}
-		
-		return arr;
-	}
-
 	private static void plantMines(boolean[][] mines, int numMines) {
 		while (numMines > 0) {
 			int row = (int)(Math.random() * mines.length);
@@ -155,13 +93,6 @@ public class MnswprFrKo8 {
 			}
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
 	
 	private static String[][] createField(boolean[][] mines) {
 		String[][] field = 
@@ -178,15 +109,6 @@ public class MnswprFrKo8 {
 		
 		return field;
 	}
-
-	
-	
-	
-	
-	
-	
-	
-	
 
 	private static String countNearby(boolean[][] mines, int row, int col) {
 //		for(int r = row - 1; r <= row +1; r ++){
@@ -223,24 +145,12 @@ public class MnswprFrKo8 {
 		
 		return ""+count;
 	}
-
-
 	
-
 	private static int isValidAndTrue(boolean[][] mines, int i, int j) {
 		if (i >= 0 && i < mines.length && j >= 0 && j < mines[0].length && mines[i][j]) {
 			return 1;
 		}
 		return 0;
-	}
-
-	public static void printPic(String[][] pic) {
-		for (String[] row : pic) {
-			for (String col : row){
-				System.out.print(col);
-			}
-			System.out.print("\n");
-		}
 	}
 	
 	public static void printField(String[][] pic) {
@@ -265,6 +175,7 @@ public class MnswprFrKo8 {
 			System.out.print("\n");
 		}
 	}
+	
 	
 
 }
