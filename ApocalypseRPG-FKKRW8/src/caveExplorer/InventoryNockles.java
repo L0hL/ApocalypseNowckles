@@ -5,7 +5,7 @@ import javax.sound.midi.MidiUnavailableException;
 
 public class InventoryNockles {
 	
-	private boolean hasMap;
+	protected boolean hasMap;
 	private String map;
 	
 	public static final int NORTH = 0;
@@ -14,8 +14,10 @@ public class InventoryNockles {
 	public static final int WEST = 3;
 
 	public InventoryNockles() {
-		hasMap = true;
-		updateMap();
+		hasMap = false;
+		if (hasMap) {
+			updateMap();
+		}
 	}
 
 	public void updateMap() {
@@ -80,6 +82,27 @@ public class InventoryNockles {
 			}
 			else if (dirs[1][i]) {
 				Launchpad.display(Launchpad.launchpad, modPxls[i], 5, "solid");
+			}
+		}
+	}
+	
+	public static void printLargeAdjLP(boolean[][] dirs) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
+		int[] center = {3,3};
+		Launchpad.display(Launchpad.launchpad, Launchpad.make2x2Square(center), 21, "pulse");
+		
+		int[][] modPxls = {
+				{center[0]-2, center[1]}, //NORTH
+				{center[0], center[1]+2}, //EAST
+				{center[0]+2, center[1]}, //SOUTH
+				{center[0], center[1]-2}, //WEST
+		};
+		
+		for (int i = 0; i < dirs[0].length; i++) {
+			if (dirs[0][i]) {
+				Launchpad.display(Launchpad.launchpad, Launchpad.make2x2Square(modPxls[i]), 3, "solid");
+			}
+			else if (dirs[1][i]) {
+				Launchpad.display(Launchpad.launchpad, Launchpad.make2x2Square(modPxls[i]), 5, "solid");
 			}
 		}
 	}

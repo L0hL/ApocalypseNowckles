@@ -29,7 +29,7 @@ public class GameStartEvent implements Playable {
 			new Thread() {
 	            public void run() {
 						try {
-							Launchpad.flashImg(Launchpad.launchpad, Launchpad.messageOutline, 3, 500, 500, 3, 0, 50, 0, 50, false);
+							Launchpad.flashImg(Launchpad.launchpad, Launchpad.messageOutline, 3, 250, 250, 3, 0, 50, 0, 50, false);
 						} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -44,7 +44,7 @@ public class GameStartEvent implements Playable {
 			new Thread() {
 	            public void run() {
 						try {
-							Launchpad.flashImg(Launchpad.launchpad, Launchpad.questionMark, 3, 500, 500, 3, 0, 50, 0, 50, false);
+							Launchpad.flashImg(Launchpad.launchpad, Launchpad.questionMark, 3, 250, 250, 3, 0, 25, 0, 25, false);
 						} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -64,7 +64,7 @@ public class GameStartEvent implements Playable {
 			new Thread() {
 	            public void run() {
 	            	try {
-	            		Launchpad.flashImg(Launchpad.launchpad, Launchpad.plus6x6, 13, 125, 1, 5, 0, 0, 0, 0, false);
+	            		Launchpad.flashImg(Launchpad.launchpad, Launchpad.plus6x6, 13, 67, 125, 5, 0, 0, 0, 0, false);
 	            	} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
 	            		// TODO Auto-generated catch block
 	            		e.printStackTrace();

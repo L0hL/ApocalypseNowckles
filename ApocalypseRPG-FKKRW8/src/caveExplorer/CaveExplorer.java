@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
+import javax.swing.plaf.InputMapUIResource;
 
 public class CaveExplorer {
 	
@@ -78,15 +79,16 @@ public class CaveExplorer {
 			new Thread() {
 				public void run() {
 					if (useLaunchpadInput) {
-						if (!GameStartEvent.eventOccurred) {
+//						if (!inventory.hasMap) {
 							try {
 								Launchpad.clearPads(Launchpad.launchpad, 0, 0);
-								InventoryNockles.printAdjLP(center, currentRoom.getAdjRooms());
+//								InventoryNockles.printAdjLP(center, currentRoom.getAdjRooms());
+								InventoryNockles.printLargeAdjLP(currentRoom.getAdjRooms());
 							} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-						}
+//						}
 					}
 				}
 			}.start();
@@ -96,13 +98,17 @@ public class CaveExplorer {
 			
 			printDelay("What would you like to do?", 30, false);
 			
-			boolean inputConstant = false;
-			String inputToUse = "";
-			String input = in.nextLine();
+			
+			
+			String consoleInput = in.nextLine();
 			System.out.print("\n");
-			act(input);
+			act(consoleInput);
+
 		}
 	}
+
+
+
 	
 	private static void act(String input) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
 		currentRoom.interpretAction(input);

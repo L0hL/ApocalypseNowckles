@@ -398,6 +398,31 @@ public class Launchpad {
 		return keyPress;
 	}
 	
+	public static int[][] make2x2Square(int[] topLeftCorner) {
+		int yStart = topLeftCorner[0];
+		int xStart = topLeftCorner[1];
+		if((yStart >= keys.length - 1) || (xStart >= keys[xStart].length - 1)) {
+			System.out.println("Could not create 2x2 square at {" + yStart + ", " + xStart + "}.");
+			return null;
+		}
+		else{
+			int[][] square = new int[4][2];
+			square[0] = topLeftCorner;
+			
+			int count = 0;
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < 2; j++) {
+					int num = 2*i + j;
+					square[num][0] = yStart + i;
+					square[num][1] = xStart + j;
+				}
+			}
+			
+			return square;
+			
+		}
+	}
+	
 	public static void flashImg(MidiDevice device, int[][] pxls, int color, long onTime, long offTime, int reps, int indDelayOn, int rowDelayOn, int indDelayOff, int rowDelayOff, boolean pauseAtEnd) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException{
 		int[][] sortedPixels = new int[pxls.length][2];
 		
