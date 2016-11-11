@@ -175,6 +175,11 @@ public class Launchpad {
 			
 		}
 		
+		if (launchpadDeviceNumber == -1 || launchpadInNumber == 0) {
+			System.out.println("Cannot find Launchpad. Quitting.");
+			System.exit(0);
+		}
+		
 		System.out.println("Receiving from MIDI device " + launchpadInNumber);
 		System.out.println("Sending to MIDI device     " + launchpadDeviceNumber);
 		
