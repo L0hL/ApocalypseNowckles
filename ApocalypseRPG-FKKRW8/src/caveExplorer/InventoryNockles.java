@@ -99,7 +99,7 @@ public class InventoryNockles {
 		
 		for (int i = 0; i < dirs[0].length; i++) {
 			if (dirs[0][i]) {
-				Launchpad.display(Launchpad.launchpad, Launchpad.make2x2Square(modPxls[i]), 3, "solid");
+				Launchpad.display(Launchpad.launchpad, Launchpad.make2x2Square(modPxls[i]), 2, "solid");
 			}
 			else if (dirs[1][i]) {
 				Launchpad.display(Launchpad.launchpad, Launchpad.make2x2Square(modPxls[i]), 5, "solid");

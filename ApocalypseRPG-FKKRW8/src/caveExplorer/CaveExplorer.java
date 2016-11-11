@@ -19,6 +19,9 @@ public class CaveExplorer {
 
 	public static void main(String[] args) throws InterruptedException, MidiUnavailableException, InvalidMidiDataException {
 
+		System.out.println("WARNING: \nThis program uses multithreading!");
+		System.out.println("Quit now if the runtime environment does not support this!\n");
+		
 		in = new Scanner(System.in);
 		
 //		System.out.println("Play with Launchpad? (Y/N) ");
@@ -31,6 +34,7 @@ public class CaveExplorer {
 //		useLaunchpadInput = (ulpR.indexOf("y") >= 0);
 		
 		useLaunchpadInput = Launchpad.main(null); 
+		System.out.print("\n");
 		
 		
 		if (useLaunchpadInput) {
