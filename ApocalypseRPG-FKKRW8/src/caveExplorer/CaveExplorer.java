@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
-import javax.swing.plaf.InputMapUIResource;
 
 public class CaveExplorer {
 	

@@ -178,7 +178,6 @@ public class Launchpad {
 		if (launchpadDeviceNumber == -1 || launchpadInNumber == 0) {
 			System.out.println("Cannot find Launchpad.");
 			return false;
-//			System.exit(0);
 		}
 		
 		System.out.println("Receiving from MIDI device " + launchpadInNumber);
@@ -192,40 +191,8 @@ public class Launchpad {
 		nrec = launchpad.getReceiver();
 		ntra = launchpadIn.getTransmitter();
 		
-		
-//		for (int i = 0; i < 8; i++) {
-//			for (int j = 0; j < 8; j++) {
-//				int[] coordsArr = {i, j};
-//				display(launchpad, coordsArr, 79, "solid");
-//				Thread.sleep(2);
-//			}
-//		}
-//		int[][] pixelsssss = {
-//				{0,1},
-//				{1,1},
-//				{1,3},
-//				{2,1},
-//				{2,2},
-//				{2,3},
-//				{2,4},
-//				};
-////		display(launchpad, pixelsssss, 3, "solid");
-//		
-//		long[] times = {250, 250, 250, 250, 250, 250};
-//		
-//		flashImg(launchpad, pixelsssss, GREEN, times, 0, 20, true);
-//		
-//			
-//		
-//		Thread.sleep(2000);
-//		
-//		clearPads(launchpad, 0, 20);
-//		
-//		System.exit(0);
 		Thread.yield();
 		return true;
-		
-//		getInput();
 	}
 	
 	
