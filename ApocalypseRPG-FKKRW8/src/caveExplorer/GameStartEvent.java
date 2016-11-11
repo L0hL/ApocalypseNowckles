@@ -64,7 +64,7 @@ public class GameStartEvent implements Playable {
 			new Thread() {
 	            public void run() {
 	            	try {
-	            		Launchpad.flashImg(Launchpad.launchpad, Launchpad.plus6x6, 13, 250, 250, 5, 0, 0, 0, 0, false);
+	            		Launchpad.flashImg(Launchpad.launchpad, Launchpad.plus6x6, 13, 125, 1, 5, 0, 0, 0, 0, false);
 	            	} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
 	            		// TODO Auto-generated catch block
 	            		e.printStackTrace();
