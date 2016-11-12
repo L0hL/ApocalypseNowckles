@@ -51,7 +51,6 @@ public class CaveExplorer {
 //			}
 //		}
 		
-		cavesHidden[2][4] = true;
 
 		for (int row = 0; row < caves.length; row++) {
 			for (int col = 0; col < caves[row].length; col++) {
@@ -59,16 +58,27 @@ public class CaveExplorer {
 			}
 		}
 		
-		currentRoom = caves[1][2];
 		
-		caves[1][3] = new EventRoom("This is where you found the map.", true, new GameStartEvent());
+		caves[1][2] = new EventRoom("This is where you found the map.", true, new GameStartEvent());
+		caves[1][5] = new EventRoom("You beat Minesweeper here!", true, new MnswprFrKo8());		
+		caves[1][1].setConnection(CaveRoomPd8.WEST, caves[1][0], new Door());
+		caves[1][1].setConnection(CaveRoomPd8.SOUTH, caves[2][1], new Door());
+		caves[1][1].setConnection(CaveRoomPd8.EAST, caves[1][2], new Door());
 		
-		currentRoom.enter();
-		caves[1][2].setConnection(CaveRoomPd8.WEST, caves[1][1], new Door());
-		caves[1][2].setConnection(CaveRoomPd8.SOUTH, caves[2][2], new Door());
 		caves[1][2].setConnection(CaveRoomPd8.EAST, caves[1][3], new Door());
 		
+		caves[1][3].setConnection(CaveRoomPd8.NORTH, caves[0][3], new Door());
+		
+		caves[0][3].setConnection(CaveRoomPd8.EAST, caves[0][4], new Door());
+		caves[0][4].setConnection(CaveRoomPd8.EAST, caves[0][5], new Door());
+		caves[0][5].setConnection(CaveRoomPd8.SOUTH, caves[1][5], new Door());
+		
+
+		cavesHidden[2][4] = true;
+
+		currentRoom = caves[1][1];
 		currentRoom.getAdjRooms();
+		currentRoom.enter();
 		
 		inventory = new InventoryNockles();
 		
@@ -88,10 +98,54 @@ public class CaveExplorer {
 							try {
 								Launchpad.clearPads(Launchpad.launchpad, 0, 0);
 //								InventoryNockles.printAdjLP(center, currentRoom.getAdjRooms());
-								InventoryNockles.printLargeAdjLP(currentRoom.getAdjRooms());
+//								if (inventory.hasMap) {
+//									int[] searchCoords;
+//									String searchDirStr;
+//									int[] currentCoords = getCoords(currentRoom);
+//									for (int i = 0; i < 4; i++) {
+//										switch (i) {
+//										case CaveRoomPd8.NORTH:
+//											searchCoords = new int[] {currentCoords[0]-1,currentCoords[1]};
+//											searchDirStr = "north";
+//											break;
+//
+//										case CaveRoomPd8.EAST:
+//											searchCoords = new int[] {currentCoords[0],currentCoords[1]+1};
+//											searchDirStr = "east";
+//											break;
+//
+//										case CaveRoomPd8.SOUTH:
+//											searchCoords = new int[] {currentCoords[0]+1,currentCoords[1]};
+//											searchDirStr = "south";
+//											break;
+//
+//										case CaveRoomPd8.WEST:
+//											searchCoords = new int[] {currentCoords[0],currentCoords[1]-1};
+//											searchDirStr = "east";
+//											break;
+//
+//										default:
+//											searchCoords = null;
+//											searchDirStr = null;
+//										}
+//
+//
+//										if (searchCoords != null) {
+//											int searchY = searchCoords[0];
+//											int searchX = searchCoords[1];
+//											if ((searchY >= 0 && searchY < caves.length) && (searchX >= 0 && searchX < caves[searchY].length)) {
+//
+//												InventoryNockles.printLargeAdjLP(searchDirStr, caves[searchY][searchX].getAdjRooms());
+//											}
+//										}
+//
+//
+//									}
+//								}
+								InventoryNockles.printLargeAdjLP("center", currentRoom.getAdjRooms());
 							} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
 							}
 //						}
 					}
@@ -101,6 +155,7 @@ public class CaveExplorer {
 			print(inventory.getDescription());
 			print(currentRoom.getDescription());
 			
+//			System.out.println(getCoords(currentRoom)[0] + " " + getCoords(currentRoom)[1]);
 			printDelay("What would you like to do?", 30, false);
 			
 			
@@ -132,5 +187,20 @@ public class CaveExplorer {
 		if (lineBreak){
 			System.out.print("\n");
 		}
+	}
+	
+	public static int[] getCoords(CaveRoomPd8 room) {
+//		int[] coords = new int[2];
+		
+		for (int i = 0; i < caves.length; i++) {
+			for (int j = 0; j < caves[i].length; j++) {
+				if (caves[i][j] == room) {
+					return new int[] {i, j};
+				}
+			}
+		}
+		
+		return null;
+		
 	}
 }

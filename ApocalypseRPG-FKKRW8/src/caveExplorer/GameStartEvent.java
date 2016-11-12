@@ -77,16 +77,16 @@ public class GameStartEvent implements Playable {
 		Thread.sleep(2000);
 	}
 	
-	public static void readSequence(String[] seq, long delay) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException{
+	public static void readSequence(String[] seq, long charDelay) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException{
 		for (int s = 0; s < seq.length - 1; s++) {
-			int[][] pxls = {{1,1},{2,2}};
-			
-//			Launchpad.flashImg(Launchpad.launchpad, pxls, 16, {}, indDelay, rowDelay, pauseAtEnd);
-			CaveExplorer.printDelay(seq[s], delay, true);
+			CaveExplorer.printDelay(seq[s], charDelay, true);
 			System.out.println("- - - press enter - - -");
-			CaveExplorer.in.nextLine();
+			if(CaveExplorer.in.nextLine().toLowerCase().indexOf("skip") >= 0){
+				System.out.println("Dialogue sequence skipped.");
+				return;
+			}
 		}
-		CaveExplorer.printDelay(seq[seq.length - 1], delay, true);
+		CaveExplorer.printDelay(seq[seq.length - 1], charDelay, true);
 		System.out.print("\n");
 	}
 

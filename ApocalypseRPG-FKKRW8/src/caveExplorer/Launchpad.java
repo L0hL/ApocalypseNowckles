@@ -248,10 +248,21 @@ public class Launchpad {
 			
 			int channel;
 			switch (mode) {
-			case "blink": channel = FLASH;
-			case "flash": channel = FLASH;
-			case "pulse": channel = PULSE;
-			default: channel = SOLID;
+			case "blink":
+				channel = FLASH;
+				break;
+			
+			case "flash":
+				channel = FLASH;
+				break;
+			
+			case "pulse":
+				channel = PULSE;
+				break;
+				
+			default:
+				channel = SOLID;
+				break;
 			}
 			
 			changePixel(device, pxl, channel, color);

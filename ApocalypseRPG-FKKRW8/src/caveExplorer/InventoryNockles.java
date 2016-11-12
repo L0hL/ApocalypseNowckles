@@ -86,9 +86,31 @@ public class InventoryNockles {
 		}
 	}
 	
-	public static void printLargeAdjLP(boolean[][] dirs) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
-		int[] center = {3,3};
-		Launchpad.display(Launchpad.launchpad, Launchpad.make2x2Square(center), 21, "pulse");
+	public static void printLargeAdjLP(String position, boolean[][] dirs) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
+//		int[] center = {3,3};
+		int[] center;
+		switch (position.toLowerCase()) {
+		case "north":
+			center = new int[] {1,3};
+			break;
+			
+		case "east":
+			center = new int[] {3,5};
+			break;
+			
+		case "south":
+			center = new int[] {5,3};
+			break;
+			
+		case "west":
+			center = new int[] {3,1};
+			break;
+
+		default:
+			center = new int[] {3,3};
+			break;
+		}
+		
 		
 		int[][] modPxls = {
 				{center[0]-2, center[1]}, //NORTH
@@ -98,13 +120,19 @@ public class InventoryNockles {
 		};
 		
 		for (int i = 0; i < dirs[0].length; i++) {
-			if (dirs[0][i]) {
-				Launchpad.display(Launchpad.launchpad, Launchpad.make2x2Square(modPxls[i]), 2, "solid");
+			if (dirs[0][i]) { //if door is open
+				if(Launchpad.make2x2Square(modPxls[i]) != null) {
+				
+
+
+					Launchpad.display(Launchpad.launchpad, Launchpad.make2x2Square(modPxls[i]), 2, "solid");
+				}
 			}
-			else if (dirs[1][i]) {
+			else if (dirs[1][i]) { //if door is locked
 				Launchpad.display(Launchpad.launchpad, Launchpad.make2x2Square(modPxls[i]), 5, "solid");
 			}
 		}
+		Launchpad.display(Launchpad.launchpad, Launchpad.make2x2Square(center), 21, "solid");
 	}
 
 	public String getDescription() {

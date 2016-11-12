@@ -6,6 +6,10 @@ import java.util.Iterator;
 
 public class MnswprFrKo8 implements Playable {
 
+	protected static final String cheatCode = "beatMinesweeper";
+	
+	protected static boolean gameInProgress;
+	
 	static String[][] arr2D;
 	static int starti;
 	static int startj;
@@ -15,66 +19,52 @@ public class MnswprFrKo8 implements Playable {
 	
 	static Scanner in = new Scanner(System.in);
 	
+	
 //	
 	public void play() throws InterruptedException {
-		// TODO Auto-generated method stub
+		gameInProgress = true;
 		boolean[][] mines = new boolean[12][12];
 		plantMines(mines, 30);
+		while(gameInProgress){
+			String[][] field = createField(mines);
+			printField(field);
+			String input = CaveExplorer.in.nextLine();
+		}
+		// TODO Auto-generated method stub
 //		
-		String[][] field = createField(mines);
 		
-		printField(field);
 		
 //		startGame();
 	}
 
 
 
-	private static int[] interpretInput(String input) {
-//		verify input is valid
-		while (!isValid(input)) {
-			System.out.println("Sorry! In this game, you can only use the WASD and launchpad controls.");
-			System.out.println("Tell me again what you would like to do.");
-			input = in.nextLine();
+	private static void interpretInput(String input) {
+		if (input.indexOf(cheatCode) >= 0) {
+			gameInProgress = false;
+			return;
 		}
-		
-		int currenti = starti;
-		int currentj = startj;
-		
-		input = input.toLowerCase();
-		
-		if(input.equals("w")){
-			currenti--;
+		else{
+//			verify input is valid
+			while (!isValid(input)) {
+				System.out.println("Sorry! In this game, you can only use the WASD and launchpad controls.");
+				System.out.println("Tell me again what you would like to do.");
+				input = in.nextLine();
+			}
 		}
-		else if (input.equals("s")) {
-			currenti++;
-		}
-		else if (input.equals("a")) {
-			currentj--;
-		}
-		else if (input.equals("d")) {
-			currentj++;
-		}
-		
-		int[] newCoordinates = {starti, startj};
-		if (currenti >= 0 && currenti < arr2D.length && currentj >= 0 && currentj < arr2D[0].length) {
-			newCoordinates[0] = currenti;
-			newCoordinates[1] = currentj;
-		}
-		else {
-			System.out.println("Sorry, you've reached the edge of the defined universe.");
-			System.out.println("Mr. Nockles did not offer extra points for coding areas outside the defined universe.");
-			System.out.println("Therefore, you may go no farther in this direction.");
-			System.out.println("Address all complaints to Mr. Nockles.");
-		}
-			return newCoordinates;
 	}
 
 	private static boolean isValid(String input) {
-		String[] validKeys = {"w", "a", "s", "d"};
-		for (String key : validKeys) {
-			if (input.toLowerCase().equals(key)) {
-				return true;
+				
+		return false;
+	}
+	
+	private static boolean isGridSpace(String input) {
+		input = input.toUpperCase();
+		int count = 0;
+		for (int i = 0; i < input.length(); i++) {
+			if (((int)(input.charAt(i)) < 65) || ((int)(input.charAt(i)) < 65)) {
+				
 			}
 		}
 		
