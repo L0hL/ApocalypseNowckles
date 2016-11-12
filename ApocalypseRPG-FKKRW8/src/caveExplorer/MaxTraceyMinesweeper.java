@@ -26,6 +26,7 @@ public class MaxTraceyMinesweeper implements Playable {
 	}
 	
 	public void play() throws InterruptedException {
+//		Scanner inMS = new Scanner(System.in); 
 		gameInProgress = true;
 		if (CaveExplorer.useLaunchpadInput) {
 			try {
@@ -36,22 +37,48 @@ public class MaxTraceyMinesweeper implements Playable {
 			}
 		}
 		
-//		boolean[][] mines = new boolean[12][12];
-//		mines = new boolean[12][12];
-		
+		if (CaveExplorer.useLaunchpadInput) {
+			new Thread() {
+	            public void run() {
+						try {
+							Launchpad.fillPads(Launchpad.launchpad, 5, "solid", 0, 25);
+//							Launchpad.clearPads(Launchpad.launchpad, 0, 25);
+						} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+	            	Thread.yield();
+	            	}
+	            }.start();               
+		}
+//		readSequence(SEQUENCE_1, 20);
 		
 		while(gameInProgress){
 			String[][] field = createField(mines, revealed);
 			printField(field);
 			
+			System.out.println("enter");
 			String input = CaveExplorer.in.nextLine();
-			while (!isValidSpace(toGridSpace(input))) {
-				input = CaveExplorer.in.nextLine();
+			if (input != cheatCode) {
+				while (!isValidSpace(toGridSpace(input)) || revealed[toGridSpace(input)[0]][toGridSpace(input)[1]]) {
+					if (revealed[toGridSpace(input)[0]][toGridSpace(input)[1]]) {
+						System.out.println("Select a grid space not already revealed.");
+					}
+					else {
+						System.out.println("Invalid input. Try again");
+					}	
+					input = CaveExplorer.in.nextLine();
+				}
+				int[] enteredSpace = toGridSpace(input);
+				int enteredR = toGridSpace(input)[0];
+				int enteredC = toGridSpace(input)[1];
+				System.out.println(enteredR + " " + enteredC);
+				
+				revealSpace(enteredSpace);
+				
+				
+				System.out.println("You have " + shields + " remaining.");
 			}
-			
-			
-			System.out.println("You have " + shields + " remaining.");
-			System.out.println(toGridSpace(input)[0] + " " + toGridSpace(input)[1]);
 		}
 		
 		
@@ -65,8 +92,8 @@ public class MaxTraceyMinesweeper implements Playable {
 		int r = inArr[0];
 		int c = inArr[1];
 		
-		if (!((0 <= r) && (r < mines.length))) {
-			if (!((0 <= c) && (c < mines[r].length))) {
+		if ((0 <= r) && (r < mines.length)) {
+			if ((0 <= c) && (c < mines[r].length)) {
 				return true;
 			}
 		}
