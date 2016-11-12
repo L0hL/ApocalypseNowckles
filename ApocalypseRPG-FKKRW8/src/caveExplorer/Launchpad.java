@@ -301,6 +301,28 @@ public class Launchpad {
 			}
 			Thread.sleep(rowDelay);
 		}
+	
+	}
+	
+	public static void fillPads(MidiDevice device, int color, String mode, int indDelay, int rowDelay) throws InvalidMidiDataException, MidiUnavailableException, InterruptedException {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				
+//					ShortMessage msg1 = new ShortMessage(ShortMessage.NOTE_ON, 1, keys[i][j], 0);
+//					ShortMessage msg2 = new ShortMessage(ShortMessage.NOTE_ON, 2, keys[i][j], 0);
+//					ShortMessage msg5 = new ShortMessage(ShortMessage.NOTE_ON, 5, keys[i][j], 0);
+//					device.getReceiver().send(msg1, -1);
+//					device.getReceiver().send(msg2, -1);
+//					device.getReceiver().send(msg5, -1);
+				
+				int[] pxl = {i, j};
+
+				display(device, pxl, color, mode);
+
+				Thread.sleep(indDelay);
+			}
+			Thread.sleep(rowDelay);
+		}
 	}
 	
 	public static void changePixel(MidiDevice device, int[] pxl, int channel, int color) throws InvalidMidiDataException, MidiUnavailableException {
