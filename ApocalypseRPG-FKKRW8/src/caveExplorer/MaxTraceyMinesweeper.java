@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Iterator;
 
-public class MnswprFrKo8 implements Playable {
+public class MaxTraceyMinesweeper implements Playable {
 
 	protected static final String cheatCode = "beatMinesweeper";
 	
