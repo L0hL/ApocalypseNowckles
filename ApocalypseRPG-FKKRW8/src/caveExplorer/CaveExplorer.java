@@ -60,7 +60,9 @@ public class CaveExplorer {
 		
 		
 		caves[1][2] = new EventRoom("This is where you found the map.", true, new GameStartEvent());
-		caves[1][5] = new EventRoom("You beat Minesweeper here!", true, new MaxTraceyMinesweeper());		
+		caves[1][5] = new EventRoom("You beat Minesweeper here!", true, new MaxTraceyMinesweeper());
+		caves[1][5] = new EventRoom("You beat Simons game here!", true, new SimonRoom());
+		
 		caves[1][1].setConnection(CaveRoomPd8.WEST, caves[1][0], new Door());
 		caves[1][1].setConnection(CaveRoomPd8.SOUTH, caves[2][1], new Door());
 		caves[1][1].setConnection(CaveRoomPd8.EAST, caves[1][2], new Door());
@@ -70,6 +72,7 @@ public class CaveExplorer {
 		caves[1][3].setConnection(CaveRoomPd8.NORTH, caves[0][3], new Door());
 		
 		caves[0][3].setConnection(CaveRoomPd8.EAST, caves[0][4], new Door());
+		caves[0][3].setConnection(CaveRoomPd8.WEST, caves[0][2], new Door());
 		caves[0][4].setConnection(CaveRoomPd8.EAST, caves[0][5], new Door());
 		caves[0][5].setConnection(CaveRoomPd8.SOUTH, caves[1][5], new Door());
 		
