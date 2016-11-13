@@ -42,7 +42,7 @@ public class MaxTraceyMinesweeper implements Playable {
 	            public void run() {
 						try {
 							Launchpad.fillPads(Launchpad.launchpad, 5, "solid", 0, 25);
-//							Launchpad.clearPads(Launchpad.launchpad, 0, 25);
+							Launchpad.clearPads(Launchpad.launchpad, 0, 25);
 						} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
