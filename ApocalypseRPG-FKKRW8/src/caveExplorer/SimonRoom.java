@@ -15,7 +15,6 @@ public class SimonRoom implements Playable {
 	public static String grid[][];
 	static int[] cards;
 	public static String[] alphaId=new String[20];
-	public static Scanner in;
 	@Override
 	public void play() throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
 		// TODO Auto-generated method stub
@@ -128,7 +127,7 @@ public class SimonRoom implements Playable {
 	public void interpretAction(String input) {
 		while (!isValid(input.toLowerCase())) {
 			CaveExplorer.print("Please pick a card");
-			input = SimonRoom.in.nextLine();
+			input = CaveExplorer.in.nextLine();
 		}
 		
 		String[] keys = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t"};
@@ -138,7 +137,7 @@ public class SimonRoom implements Playable {
 		keys[card1]="z";
 		while (!isValid(input.toLowerCase())) {
 			CaveExplorer.print("Please pick another card");
-			input = SimonRoom.in.nextLine();
+			input = CaveExplorer.in.nextLine();
 		}
 		int card2=searchUnsortedStrings(keys,input);
 		flippedCards[card2]=card2;
