@@ -3,6 +3,8 @@ package caveExplorer;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 
+import caveExplorer.maxTracey.Launchpad;
+
 public class MidiInChangeRunnable implements Runnable {
 
 	public static int inData = 0;

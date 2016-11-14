@@ -5,6 +5,9 @@ import java.util.Scanner;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 
+import caveExplorer.maxTracey.Launchpad;
+import caveExplorer.maxTracey.MaxTraceyMinesweeper;
+
 public class CaveExplorer {
 	
 	public static boolean useLaunchpadInput;
@@ -38,7 +41,7 @@ public class CaveExplorer {
 		
 		if (useLaunchpadInput) {
 //			Launchpad.main(null);
-			Launchpad.clearPads(Launchpad.launchpad, 0, 0);
+			Launchpad.clearPads(caveExplorer.maxTracey.Launchpad.launchpad, 0, 0);
 		}
 		
 		

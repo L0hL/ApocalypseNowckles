@@ -1,7 +1,10 @@
-package caveExplorer;
+package caveExplorer.maxTracey;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
+
+import caveExplorer.CaveExplorer;
+import caveExplorer.Playable;
 
 public class MaxTraceyMinesweeper implements Playable {
 
@@ -59,27 +62,33 @@ public class MaxTraceyMinesweeper implements Playable {
 			
 			System.out.println("enter");
 			String input = CaveExplorer.in.nextLine();
-			if (input != cheatCode) {
-				while (!isValidSpace(toGridSpace(input)) || revealed[toGridSpace(input)[0]][toGridSpace(input)[1]]) {
-					if (revealed[toGridSpace(input)[0]][toGridSpace(input)[1]]) {
-						System.out.println("Select a grid space not already revealed.");
-					}
-					else {
-						System.out.println("Invalid input. Try again");
-					}	
+			while (!isValidSpace(toGridSpace(input))) {
+				if (input != cheatCode) {
+					System.out.println("Invalid input. Try again");
 					input = CaveExplorer.in.nextLine();
 				}
-				int[] enteredSpace = toGridSpace(input);
-				int enteredR = toGridSpace(input)[0];
-				int enteredC = toGridSpace(input)[1];
-				System.out.println(enteredR + " " + enteredC);
-				
-				revealSpace(enteredSpace);
-				
-				
-				System.out.println("You have " + shields + " remaining.");
+				else {
+					System.out.println("Cheat code entered. Exiting.");
+//					for (int i = 0; i < revealed.length; i++) {
+//						for (int j = 0; j < field.length; j++) {
+//							
+//						}
+//						revealSpace([, true);
+//					}
+					gameInProgress = false;
+				}
 			}
+			int[] enteredSpace = toGridSpace(input);
+			int enteredR = toGridSpace(input)[0];
+			int enteredC = toGridSpace(input)[1];
+			System.out.println(enteredR + " " + enteredC);
+			
+			revealSpace(enteredSpace, false);
+			
+			
+			System.out.println("You have " + shields + " remaining.");
 		}
+		
 		
 		
 	}
@@ -259,7 +268,7 @@ public class MaxTraceyMinesweeper implements Playable {
 		}
 	}
 	
-	protected void revealSpace(int[] space) {
+	protected void revealSpace(int[] space, boolean safety) {
 		revealed[space[0]][space[1]] = true;
 	}
 

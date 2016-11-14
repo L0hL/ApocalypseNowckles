@@ -1,4 +1,4 @@
-package caveExplorer;
+package caveExplorer.maxTracey;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiDevice;
@@ -132,8 +132,8 @@ public class Launchpad {
 	
 	public static int lastKeyPressed = 0;
 	
-	static MidiDevice launchpad;
-	static MidiDevice launchpadIn;
+	public static MidiDevice launchpad;
+	public static MidiDevice launchpadIn;
 	static Receiver nrec;
 	static Transmitter ntra;
 	
