@@ -171,12 +171,13 @@ public class SimonRoom implements Playable {
 	
 
 	private void flipCard(int i) {
-		grid[((i/10)*6)+ 4][(i%10)+6]=""+i;
+		int temp=(i/10)+(i%10);
+		grid[((i/10)*8)+ 4][(i%10)+6]=""+temp;
 		printPic(grid);
 		
 	}
 	private void flipCardBack(int i) {
-		grid[((i/10)*6)+ 4][(i%10)+6]=" ";
+		grid[((i/10)*8)+ 4][(i%10)+6]=" ";
 		printPic(grid);
 		
 	}
