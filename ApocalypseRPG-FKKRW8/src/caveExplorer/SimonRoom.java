@@ -158,8 +158,8 @@ public class SimonRoom implements Playable {
 
 	private int searchUnsortedStrings(String[] arrayToSearch, String key) {
 		
-			for (int i = 0; i < (arrayToSearch.length - 1); i++) {
-				if (arrayToSearch[i] == key) {
+			for (int i = 0; i < arrayToSearch.length; i++) {
+				if (arrayToSearch[i].equalsIgnoreCase(key)) {
 					return i;
 				}
 			}
