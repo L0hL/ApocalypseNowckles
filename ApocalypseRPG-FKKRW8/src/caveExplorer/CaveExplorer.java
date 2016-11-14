@@ -7,6 +7,7 @@ import javax.sound.midi.MidiUnavailableException;
 
 import caveExplorer.maxTracey.Launchpad;
 import caveExplorer.maxTracey.MaxTraceyMinesweeper;
+import caveExplorer.simon.SimonRoom;
 
 public class CaveExplorer {
 	

@@ -1,10 +1,13 @@
-package caveExplorer;
+package caveExplorer.simon;
 
 import java.util.Arrays;
 import java.util.Scanner;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
+
+import caveExplorer.CaveExplorer;
+import caveExplorer.Playable;
 
 public class SimonRoom implements Playable {
 	public int points = 0;
@@ -168,12 +171,12 @@ public class SimonRoom implements Playable {
 	
 
 	private void flipCard(int i) {
-		grid[i/10][(i%10)+6]=""+i;
+		grid[((i/10)*6)+ 4][(i%10)+6]=""+i;
 		printPic(grid);
 		
 	}
 	private void flipCardBack(int i) {
-		grid[i/10][(i%10)+6]="";
+		grid[((i/10)*6)+ 4][(i%10)+6]=" ";
 		printPic(grid);
 		
 	}
