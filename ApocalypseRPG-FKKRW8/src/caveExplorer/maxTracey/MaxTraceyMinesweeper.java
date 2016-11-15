@@ -56,14 +56,14 @@ public class MaxTraceyMinesweeper implements Playable {
 //		readSequence(SEQUENCE_1, 20);
 		
 		while(gameInProgress){
-			boolean[][] temp = new boolean[mines.length][mines[0].length];
-			for (int i = 0; i < mines.length; i++) {
-				for (int j = 0; j < mines[i].length; j++) {
-					temp[i][j] = true;
-				}
-			}
-			String[][] field = createField(mines, revealed);
+//			boolean[][] temp = new boolean[mines.length][mines[0].length];
+//			for (int i = 0; i < mines.length; i++) {
+//				for (int j = 0; j < mines[i].length; j++) {
+//					temp[i][j] = true;
+//				}
+//			}
 //			String[][] field = createField(mines, temp);
+			String[][] field = createField(mines, revealed);
 			printField(field);
 			
 			System.out.println("enter");
@@ -209,36 +209,20 @@ public class MaxTraceyMinesweeper implements Playable {
 	}
 
 	private static int countNearby(boolean[][] mines, int row, int col) {
-//		for(int r = row - 1; r <= row +1; r ++){
-//			for(int c = col -1; c <= col+1; c++){
-//				//check that this element exists
-//				if(r >=0 && r < mines.length &&
-//						c >=0 && c < mines[0].length){
-//					
-//				}
-//			}
-//		}
-		
-////		THIS METHOD ONLY CONSIDERS ACTUAL ELEMENTS
-//		int count = 0;
-//		for (int r = 0; r < mines.length; r++) {
-//			for (int c = 0; c < mines[r].length; c++) {
-//				if (Math.abs(r-row) + Math.abs(c-col) == 1 && mines[r][c]) {
-//					count++;
-//				}
-//			}
-//		}
-//		return "" + count;
+		/* THIS METHOD ALLOWS YOU TO BE MOST SPECIFIC
+		 * FOR EXAMPLE, IF YOU ONLY WANT NORTH AND EAST
+		 */		
 		
 		
-//		THIS METHOD ALLOWS YOU TO BE MOST SPECIFIC
-//		FOR EXAMPLE, IF YOU ONLY WANT NORTH AND EAST
 		int count = 0;
+		
+//		horizontal & vertical adjacents
 		count += isValidAndTrue(mines, row-1, col);
 		count += isValidAndTrue(mines, row+1, col);
 		count += isValidAndTrue(mines, row, col-1);
 		count += isValidAndTrue(mines, row, col+1);
 		
+//		diagonal adjacents
 		count += isValidAndTrue(mines, row-1, col-1);
 		count += isValidAndTrue(mines, row-1, col+1);
 		count += isValidAndTrue(mines, row+1, col-1);
@@ -321,6 +305,21 @@ public class MaxTraceyMinesweeper implements Playable {
 		int mC = mine[1];
 		
 		shields--;
+	}
+	
+	private int match2dArrs(boolean[][] inArr1, boolean[][] inArr2, boolean matchType) {
+		int count = 0;
+		if (inArr1.length == inArr2.length) {
+			for (int i = 0; i < inArr1.length; i++) {
+				for (int j = 0; j < inArr1.length; j++) {
+					if ((inArr1[i][j] == inArr2[i][j]) == matchType) {
+						count++;
+					}
+				}
+			}
+		}
+		
+		return count;
 	}
 
 }
