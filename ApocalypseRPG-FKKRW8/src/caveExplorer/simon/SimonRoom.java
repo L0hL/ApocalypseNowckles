@@ -10,6 +10,7 @@ import caveExplorer.CaveExplorer;
 import caveExplorer.Playable;
 
 public class SimonRoom implements Playable {
+	String[] keys = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t"};
 	public int points = 0;
 	public static int[] flippedCards=new int[20];
 	static String cardArray[][];
@@ -50,7 +51,7 @@ public class SimonRoom implements Playable {
 				// printArrayLinear(outArray);
 				tempInt = (int) ((10) * Math.random()) + 1;
 				if (searchUnsorted(key, tempInt) >= 0) {
-					cards[i] = tempInt;
+					cards[i] = key[tempInt];
 					key[tempInt] = -2;
 					inLoop = false;
 				}
@@ -118,23 +119,34 @@ public class SimonRoom implements Playable {
 		return -1;
 	}
 	private static boolean isValid(String input) {
+		int tempAlpha = 0;
 		String[] keys = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t"};
 		for (int i=0;i<keys.length;i++) {
-			if (input.toLowerCase().equals(keys[i])&& i!=flippedCards[i]) {
+			if (input.toLowerCase().equals(keys[i])){
+				tempAlpha = i;
+				break;
+				}
+			else tempAlpha=-1;
+		}
+		for (int i=0;i<keys.length;i++) {
+			if ( tempAlpha!=flippedCards[i]&&tempAlpha!=-1) {
 				return true;
 			}
+			
 		}
 		
 		return false;
 	}
 	public void interpretAction(String input) {
+		
 		while (!isValid(input.toLowerCase())) {
 			CaveExplorer.print("Please pick a card");
 			input = CaveExplorer.in.nextLine();
 		}
 		
-		String[] keys = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t"};
+		
 		int card1=searchUnsortedStrings(keys,input);
+		String card1H=keys[card1];
 		flippedCards[card1]=card1;
 		flipCard(card1);
 		keys[card1]="z";
@@ -143,16 +155,19 @@ public class SimonRoom implements Playable {
 			input = CaveExplorer.in.nextLine();
 		}
 		int card2=searchUnsortedStrings(keys,input);
+		String card2H=keys[card2];
 		flippedCards[card2]=card2;
 		flipCard(card2);
-		
-	if(searchUnsorted(cards, card1)==searchUnsorted(cards, card2)){
+		keys[card1]="z";
+	if(cards[card1]==cards[card2]){
 	points+=2;
 	CaveExplorer.print("Congrats! you now have "+points+" points");
 	}
 	else{
-		flippedCards[card1]=-2;
-		flippedCards[card2]=-2;
+		keys[card1]=card1H;
+		keys[card2]=card2H;
+		flippedCards[card1]=0;
+		flippedCards[card2]=0;
 		flipCardBack(card1);
 		flipCardBack(card2);
 	}
@@ -172,7 +187,7 @@ public class SimonRoom implements Playable {
 
 	private void flipCard(int i) {
 		int temp=(i/10)+(i%10);
-		grid[((i/10)*8)+ 4][(i%10)+6]=""+temp;
+		grid[((i/10)*8)+ 4][(i%10)+6]=""+cards[temp];
 		printPic(grid);
 		
 	}
