@@ -19,12 +19,12 @@ public class MaxTraceyMinesweeper implements Playable {
 	static boolean[][] revealed;
 	static int shields;
 	
-	public MaxTraceyMinesweeper() {
-		mines = new boolean[12][12];
-		revealed = new boolean[mines.length][mines[0].length];
-		shields = 3;
+	public MaxTraceyMinesweeper(int numRows, int numCols, int numMines, int numShields) {
+		mines = new boolean[numRows][numCols];
+		revealed = new boolean[numRows][numCols];
+		shields = numShields;
 		
-		plantMines(mines, 30);
+		plantMines(mines, numMines);
 	}
 	
 	public void play() throws InterruptedException {
