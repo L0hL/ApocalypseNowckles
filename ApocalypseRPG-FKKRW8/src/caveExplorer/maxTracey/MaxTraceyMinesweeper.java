@@ -21,7 +21,7 @@ public class MaxTraceyMinesweeper implements Playable {
 	
 	public MaxTraceyMinesweeper() {
 		mines = new boolean[12][12];
-		revealed = new boolean[12][12];
+		revealed = new boolean[mines.length][mines[0].length];
 		shields = 3;
 		
 		plantMines(mines, 30);
