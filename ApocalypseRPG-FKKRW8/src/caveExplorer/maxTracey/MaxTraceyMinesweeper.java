@@ -92,7 +92,7 @@ public class MaxTraceyMinesweeper implements Playable {
 			revealSpace(enteredSpace, new int[] {-1,-1}, false);
 			
 			
-			System.out.println("You have " + shields + " remaining.");
+			System.out.println("You have " + shields + " shields remaining.");
 		}
 		
 		
@@ -285,9 +285,11 @@ public class MaxTraceyMinesweeper implements Playable {
 		int r = space[0];
 		int c = space[1];
 		revealed[r][c] = true;
-		if (mines[r][c] != true) {
+		if (mines[r][c] == true && !safety) {
+			explodeMine(space);
+		}
+		else {
 			if (countNearby(mines, r, c) == 0) {
-				
 				int[][] newSpaces = new int[][] {
 					{r-1, c-1},
 					{r-1, c},
@@ -305,17 +307,20 @@ public class MaxTraceyMinesweeper implements Playable {
 					int nC = newSpace[1];
 					if (isValidSpace(newSpace)) {
 						if (!revealed[nR][nC]) {
-							revealSpace(newSpace, space, true);
+							revealSpace(newSpace, space, safety);
 						}
 					}
 				}
-					
+				
 			}
 		}
 	}
 	
-	protected void explodeMine(int[][] mine){
+	protected void explodeMine(int[] mine){
+		int mR = mine[0];
+		int mC = mine[1];
 		
+		shields--;
 	}
 
 }
