@@ -56,7 +56,14 @@ public class MaxTraceyMinesweeper implements Playable {
 //		readSequence(SEQUENCE_1, 20);
 		
 		while(gameInProgress){
+			boolean[][] temp = new boolean[mines.length][mines[0].length];
+			for (int i = 0; i < mines.length; i++) {
+				for (int j = 0; j < mines[i].length; j++) {
+					temp[i][j] = true;
+				}
+			}
 			String[][] field = createField(mines, revealed);
+//			String[][] field = createField(mines, temp);
 			printField(field);
 			
 			System.out.println("enter");
@@ -82,7 +89,7 @@ public class MaxTraceyMinesweeper implements Playable {
 			int enteredC = toGridSpace(input)[1];
 			System.out.println(enteredR + " " + enteredC);
 			
-			revealSpace(enteredSpace, false);
+			revealSpace(enteredSpace, new int[] {-1,-1}, false);
 			
 			
 			System.out.println("You have " + shields + " remaining.");
@@ -101,7 +108,7 @@ public class MaxTraceyMinesweeper implements Playable {
 		int c = inArr[1];
 		
 		if ((0 <= r) && (r < mines.length)) {
-			if ((0 <= c) && (c < mines[r].length)) {
+			if ((0 <= c) && (c < mines[0].length)) {
 				return true;
 			}
 		}
@@ -188,7 +195,7 @@ public class MaxTraceyMinesweeper implements Playable {
 						field[row][col] = "X";
 					}
 					else {						
-						field[row][col] = countNearby(mines,row,col);
+						field[row][col] = ""+countNearby(mines,row,col);
 					}
 				}
 				else {
@@ -201,7 +208,7 @@ public class MaxTraceyMinesweeper implements Playable {
 		return field;
 	}
 
-	private static String countNearby(boolean[][] mines, int row, int col) {
+	private static int countNearby(boolean[][] mines, int row, int col) {
 //		for(int r = row - 1; r <= row +1; r ++){
 //			for(int c = col -1; c <= col+1; c++){
 //				//check that this element exists
@@ -232,14 +239,20 @@ public class MaxTraceyMinesweeper implements Playable {
 		count += isValidAndTrue(mines, row, col-1);
 		count += isValidAndTrue(mines, row, col+1);
 		
+		count += isValidAndTrue(mines, row-1, col-1);
+		count += isValidAndTrue(mines, row-1, col+1);
+		count += isValidAndTrue(mines, row+1, col-1);
+		count += isValidAndTrue(mines, row+1, col+1);
 		
 		
-		return ""+count;
+		return count;
 	}
 	
 	private static int isValidAndTrue(boolean[][] mines, int i, int j) {
-		if (i >= 0 && i < mines.length && j >= 0 && j < mines[0].length && mines[i][j]) {
-			return 1;
+		if (i >= 0 && i < mines.length && j >= 0 && j < mines[0].length) {
+			if (mines[i][j]) {
+				return 1;
+			}
 		}
 		return 0;
 	}
@@ -267,8 +280,42 @@ public class MaxTraceyMinesweeper implements Playable {
 		}
 	}
 	
-	protected void revealSpace(int[] space, boolean safety) {
-		revealed[space[0]][space[1]] = true;
+	protected void revealSpace(int[] space, int[] oldSpace, boolean safety) {
+
+		int r = space[0];
+		int c = space[1];
+		revealed[r][c] = true;
+		if (mines[r][c] != true) {
+			if (countNearby(mines, r, c) == 0) {
+				
+				int[][] newSpaces = new int[][] {
+					{r-1, c-1},
+					{r-1, c},
+					{r-1, c+1},
+					{r, c+1},
+					{r+1, c+1},
+					{r+1, c},
+					{r+1, c-1},
+					{r, c-1}
+				};
+				
+				for (int i = 0; i < newSpaces.length; i++) {
+					int[] newSpace = newSpaces[i];
+					int nR = newSpace[0];
+					int nC = newSpace[1];
+					if (isValidSpace(newSpace)) {
+						if (!revealed[nR][nC]) {
+							revealSpace(newSpace, space, true);
+						}
+					}
+				}
+					
+			}
+		}
+	}
+	
+	protected void explodeMine(int[][] mine){
+		
 	}
 
 }
