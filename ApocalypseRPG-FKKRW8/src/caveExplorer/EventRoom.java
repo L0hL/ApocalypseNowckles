@@ -5,7 +5,7 @@ import javax.sound.midi.MidiUnavailableException;
 
 public class EventRoom extends CaveRoomPd8 {
 
-	private boolean eventHappened;
+	public boolean eventHappened;
 	private Playable event;
 	
 	public EventRoom(String description, boolean exists, Playable event) {

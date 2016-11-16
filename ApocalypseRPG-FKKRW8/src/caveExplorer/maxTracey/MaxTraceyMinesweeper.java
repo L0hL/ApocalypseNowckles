@@ -7,7 +7,10 @@ import caveExplorer.*;
 
 public class MaxTraceyMinesweeper implements Playable {
 
+	public static boolean eventOccurred = false;
+	
 	protected static final String cheatCode = "beatMinesweeper";
+	protected static final String loseCode = "loseMinesweeper";
 	
 	protected static boolean gameInProgress;
 	
@@ -28,6 +31,7 @@ public class MaxTraceyMinesweeper implements Playable {
 	}
 	
 	public void play() throws InterruptedException {
+		this.eventOccurred = true;
 //		Scanner inMS = new Scanner(System.in); 
 		gameInProgress = true;
 		if (CaveExplorer.useLaunchpadInput) {
@@ -69,7 +73,7 @@ public class MaxTraceyMinesweeper implements Playable {
 			System.out.println("enter");
 			String input = CaveExplorer.in.nextLine();
 			while (!isValidSpace(toGridSpace(input))) {
-				if (input != cheatCode) {
+				if (input.indexOf(cheatCode) < 0 && input.indexOf(loseCode) < 0) {
 					System.out.println("Invalid input. Try again");
 					input = CaveExplorer.in.nextLine();
 				}
@@ -82,26 +86,57 @@ public class MaxTraceyMinesweeper implements Playable {
 //						revealSpace([, true);
 //					}
 					gameInProgress = false;
+					if (input.indexOf(cheatCode) >= 0) {
+						return;
+					}
+					else {
+						loseGame();
+//						input = "A1";
+						break;
+					}
 				}
 			}
-			int[] enteredSpace = toGridSpace(input);
-			int enteredR = toGridSpace(input)[0];
-			int enteredC = toGridSpace(input)[1];
-			System.out.println(enteredR + " " + enteredC);
+			if (isValidSpace(toGridSpace(input))) {
+				
+				int[] enteredSpace = toGridSpace(input);
+				int enteredR = toGridSpace(input)[0];
+				int enteredC = toGridSpace(input)[1];
+				System.out.println(enteredR + " " + enteredC);
+				
+				revealSpace(enteredSpace, new int[] {-1,-1}, false);
 			
-			revealSpace(enteredSpace, new int[] {-1,-1}, false);
+			}
 			
+			if (shields < 0) {
+				loseGame();
+				break;
+			}
 			
 			System.out.println("You have " + shields + " shields remaining.");
 		}
 		
+		for(int r=0; r<mines.length; r++){
+			for(int c=0; c<mines[r].length; c++){
+				if(mines[r][c]){
+//					revealed[r][c]=true;
+					revealSpace(new int[] {r, c}, new int[] {-1,-1}, true);
+				}
+			}
+		}
 		
+		String[][] field = createField(mines, revealed);
+		printField(field);
 		
 	}
 
 
 
-	
+	private static void loseGame() {
+		gameInProgress = false;
+		eventOccurred = false;
+		CaveExplorer.msRoom.eventHappened = false;
+//		MaxTraceyMinesweeper.eventOccurred = false;
+	}
 
 	private static boolean isValidSpace(int[] inArr) {
 		int r = inArr[0];
@@ -265,9 +300,12 @@ public class MaxTraceyMinesweeper implements Playable {
 	}
 	
 	protected void revealSpace(int[] space, int[] oldSpace, boolean safety) {
-
 		int r = space[0];
 		int c = space[1];
+		if (revealed[r][c]) {
+			return;
+		}
+		
 		revealed[r][c] = true;
 		if (mines[r][c] == true && !safety) {
 			explodeMine(space);
@@ -304,17 +342,18 @@ public class MaxTraceyMinesweeper implements Playable {
 		int mR = mine[0];
 		int mC = mine[1];
 		
-		if(shields>0) shields--;
-		else{
-			for(int r=0; r<mines.length; r++){
-				for(int c=0; c<mines[r].length; c++){
-					if(mines[c][r]){
-						revealed[c][r]=true;
-					}
-				}
-			}
-			System.out.println("You've lost.");
-		}
+		shields--;
+//		if(shields>0) shields--;
+//		else{
+//			for(int r=0; r<mines.length; r++){
+//				for(int c=0; c<mines[r].length; c++){
+//					if(mines[c][r]){
+//						revealed[c][r]=true;
+//					}
+//				}
+//			}
+//			System.out.println("You've lost.");
+//		}
 		
 	}
 	

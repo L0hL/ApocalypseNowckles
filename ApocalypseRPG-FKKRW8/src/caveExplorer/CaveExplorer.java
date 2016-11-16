@@ -18,6 +18,8 @@ public class CaveExplorer {
 	public static CaveRoomPd8 currentRoom;
 	public static InventoryNockles inventory;
 	
+	public static EventRoom msRoom;
+	
 	protected static boolean[][] cavesHidden;
 
 	public static void main(String[] args) throws InterruptedException, MidiUnavailableException, InvalidMidiDataException {
@@ -64,7 +66,9 @@ public class CaveExplorer {
 		
 		
 		caves[1][2] = new EventRoom("This is where you found the map.", true, new GameStartEvent());
-		caves[0][2] = new EventRoom("You beat Minesweeper here!", true, new MaxTraceyMinesweeper(8, 8, 8, 3));
+		msRoom = new EventRoom("You beat Minesweeper here!", true, new MaxTraceyMinesweeper(8, 8, 8, 3));
+		caves[0][2] = msRoom;
+//		caves[0][2] = new EventRoom("You beat Minesweeper here!", true, new MaxTraceyMinesweeper(8, 8, 8, 3));
 		caves[1][5] = new EventRoom("You beat Simons game here!", true, new SimonRoom());
 		
 		caves[1][1].setConnection(CaveRoomPd8.WEST, caves[1][0], new Door());
@@ -163,7 +167,7 @@ public class CaveExplorer {
 			print(currentRoom.getDescription());
 			
 //			System.out.println(getCoords(currentRoom)[0] + " " + getCoords(currentRoom)[1]);
-			printDelay("What would you like to do?", 30, false);
+			printDelay("What would you like to do?", 5, false);
 			
 			
 			
