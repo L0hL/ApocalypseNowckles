@@ -304,7 +304,18 @@ public class MaxTraceyMinesweeper implements Playable {
 		int mR = mine[0];
 		int mC = mine[1];
 		
-		shields--;
+		if(shields>0) shields--;
+		else{
+			for(int r=0; r<mines.length; r++){
+				for(int c=0; c<mines[r].length; c++){
+					if(mines[c][r]){
+						revealed[c][r]=true;
+					}
+				}
+			}
+			System.out.println("You've lost.");
+		}
+		
 	}
 	
 	private int match2dArrs(boolean[][] inArr1, boolean[][] inArr2, boolean matchType) {
