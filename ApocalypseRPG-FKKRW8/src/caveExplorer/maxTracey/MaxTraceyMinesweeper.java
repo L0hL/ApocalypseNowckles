@@ -20,6 +20,7 @@ public class MaxTraceyMinesweeper implements Playable {
 //	static Scanner in = new Scanner(System.in);
 	static boolean[][] mines;
 	static boolean[][] revealed;
+	static boolean[][] marked;
 	static int shields;
 	
 	public MaxTraceyMinesweeper(int numRows, int numCols, int numMines, int numShields) {
@@ -27,7 +28,16 @@ public class MaxTraceyMinesweeper implements Playable {
 		revealed = new boolean[numRows][numCols];
 		shields = numShields;
 		
+		//number of mines is given to the player
+		//each time the player marks a mine, 
+		//numOfMines minus 1 and
+		
+		//if the marked array is equal to the mines array then the player wins
+		
+		// marked = new boolean[numRows][numCols];
+		
 		plantMines(mines, numMines);
+		marked = new boolean[mines.length][mines[0].length];
 	}
 	
 	public void play() throws InterruptedException {
@@ -60,6 +70,11 @@ public class MaxTraceyMinesweeper implements Playable {
 //		readSequence(SEQUENCE_1, 20);
 		
 		while(gameInProgress){
+			if (checkArraysEqual(mines, marked)) {
+				gameInProgress = false;
+				return;
+			}
+			
 //			boolean[][] temp = new boolean[mines.length][mines[0].length];
 //			for (int i = 0; i < mines.length; i++) {
 //				for (int j = 0; j < mines[i].length; j++) {
@@ -67,12 +82,14 @@ public class MaxTraceyMinesweeper implements Playable {
 //				}
 //			}
 //			String[][] field = createField(mines, temp);
+			
 			String[][] field = createField(mines, revealed);
 			printField(field);
 			
 			System.out.println("enter");
 			String input = CaveExplorer.in.nextLine();
-			while (!isValidSpace(toGridSpace(input))) {
+//			while (!isValidSpace(toGridSpace(input))) {
+			while (!validateAndMarkInput(input, true)) {
 				if (input.indexOf(cheatCode) < 0 && input.indexOf(loseCode) < 0) {
 					System.out.println("Invalid input. Try again");
 					input = CaveExplorer.in.nextLine();
@@ -129,7 +146,74 @@ public class MaxTraceyMinesweeper implements Playable {
 		
 	}
 
+	private static boolean validateAndMarkInput(String input, boolean markOnRun){
+		input = input.toLowerCase();
+		String input2 = new String();
+		input2 = input;
+		if(input.indexOf("mark") >= 0 && markOnRun){
+			input2 = input.replace("mark", "").trim();
+			System.out.println(input2);
+			
+//			if (isValidSpace(toGridSpace(input2))) {
+//				int mR = toGridSpace(input2)[0];
+//				int mC = toGridSpace(input2)[1];
+//				marked[mR][mC] = !marked[mR][mC];
+//				return true;
+//			}
+			
+			if (isValidSpace(toGridSpace(input2))) {
+				markSpace(toGridSpace(input2));
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		
+		else {
+			return isValidSpace(toGridSpace(input));
+		}
+			
+		
+//		return false;
+	}
+	
+	private static void markSpace(int[] space) {
+	
+		if (isValidSpace(space)) {
+			int mR = space[0];
+			int mC = space[1];
+			if (revealed[mR][mC]) {
+				marked[mR][mC] = mines[mR][mC];
+			}
+			else {
+				marked[mR][mC] = !marked[mR][mC];
+				String toOut = "Space " + toLtr(mR) + "" + (mC + 1) + " ";
+				if (!marked[mR][mC]) {
+					toOut += "un";
+				}
+				toOut += "marked.";
+				System.out.println(toOut);
+			}
+		}
+		
+	}
+	
+	private static char toLtr(int mC) {
+		return (char) (65+mC);
+	}
 
+	private static boolean checkArraysEqual(boolean[][] arr1, boolean[][] arr2){
+		
+		for (int r = 0; r < arr1.length; r++) {
+			for (int c = 0; c < arr1[r].length; c++) {
+				if (arr1[r][c] != arr2[r][c]) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
 	private static void loseGame() {
 		gameInProgress = false;
@@ -233,6 +317,9 @@ public class MaxTraceyMinesweeper implements Playable {
 						field[row][col] = ""+countNearby(mines,row,col);
 					}
 				}
+				else if (marked[row][col]) {
+					field[row][col] = "&";
+				}
 				else {
 					field[row][col] = "#";
 				}
@@ -309,6 +396,7 @@ public class MaxTraceyMinesweeper implements Playable {
 		revealed[r][c] = true;
 		if (mines[r][c] == true && !safety) {
 			explodeMine(space);
+			markSpace(space);
 		}
 		else {
 			if (countNearby(mines, r, c) == 0) {
