@@ -1,7 +1,7 @@
 package caveExplorer.simon;
 
-import java.util.Arrays;
-import java.util.Scanner;
+//import java.util.Arrays;
+//import java.util.Scanner;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
@@ -10,32 +10,37 @@ import caveExplorer.CaveExplorer;
 import caveExplorer.Playable;
 
 public class SimonRoom implements Playable {
-	static String[] keys = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t"};
-	static String[] keysH = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t"};
-	public int points = 0;
-	static int[] flippedCards=new int[20];
-	static String cardArray[][];
-	static String[][] pic;
-	static boolean isPlaying;
-	public static String grid[][];
+	static String[] keys = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r",
+			"s", "t" };
+	static String[] keysH = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r",
+			"s", "t" };
+	static int[] special = { 10 };
+	static int points = 0;
+	static int[] flippedCards = new int[20];
+	// private static String cardArray[][];
+	// private static String[][] pic;
+	// private static boolean isPlaying;
+	private static String grid[][];
 	static int[] cards;
-	public static String[] alphaId=new String[20];
+	// private static String[] alphaId=new String[20];
+	private int lives = 25;
+
 	@Override
 	public void play() throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
 		// TODO Auto-generated method stub
-		for(int i = 0;i < flippedCards.length;i++){
-			flippedCards[i]=-2;
+		for (int i = 0; i < flippedCards.length; i++) {
+			flippedCards[i] = -2;
 		}
 		makeGame();
 
 	}
 
 	public void makeGame() {
-		
+
 		makeCards();
-		grid=newGrid(2, 10);
+		grid = newGrid(2, 10);
 		printPic(grid);
-		while(points<10){
+		while (points < 10) {
 			interpretAction();
 		}
 	}
@@ -53,7 +58,7 @@ public class SimonRoom implements Playable {
 				tempInt = (int) ((10) * Math.random()) + 1;
 				if (searchUnsorted(key, tempInt) >= 0) {
 					cards[i] = key[searchUnsorted(key, tempInt)];
-					//key[tempInt] = -2;
+					// key[tempInt] = -2;
 					inLoop = false;
 				}
 			}
@@ -61,9 +66,9 @@ public class SimonRoom implements Playable {
 
 	}
 
-
 	private static String[][] newGrid(int i, int j) {
-		String alphaId[]={"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t"};
+		// String
+		// alphaId[]={"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t"};
 		int height = 6 * i + 2;
 		int width = 8 * j + 2;
 
@@ -91,7 +96,7 @@ public class SimonRoom implements Playable {
 				arr[topLeftY + 6][topLeftX] = "_";
 				arr[topLeftY + 6][topLeftX + 1] = "_";
 				arr[topLeftY + 6][topLeftX + 2] = "_";
-				arr[topLeftY + 6][topLeftX + 3] = ""+alphaId[((a)*10)+b];
+				arr[topLeftY + 6][topLeftX + 3] = "" + keysH[((a) * 10) + b];
 				arr[topLeftY + 6][topLeftX + 4] = "_";
 				arr[topLeftY + 6][topLeftX + 5] = "_";
 				arr[topLeftY + 6][topLeftX + 6] = "_";
@@ -120,114 +125,131 @@ public class SimonRoom implements Playable {
 		}
 		return -1;
 	}
+
 	private static boolean isValid(String input) {
-		int tempAlpha = 0;
-		for (int i=0;i<keys.length;i++) {
-			if (input.toLowerCase().equals(keys[i])){
-				tempAlpha = i;
-				
-			if (tempAlpha != flippedCards[i] && tempAlpha != -1) {
-				return true;
+		int tempAlpha = -1;
+		for (int i = 0; i < keys.length; i++) {
+			if (input.toLowerCase().equals("skip")) {
+				points = 100;
 			}
+			if (input.toLowerCase().equals(keys[i])) {
+				tempAlpha = i;
+
+				if (tempAlpha != flippedCards[i]) {
+					return true;
+				} else if (i == 0 && flippedCards[i] == -2 && tempAlpha == 0) {
+					return true;
+				}
 			}
 		}
-		return false;	
+		return false;
 	}
+
 	public void interpretAction() {
-		String inpt="";
-		String input="";
+		String inpt = "";
+		String input = "";
 		inpt = CaveExplorer.in.nextLine();
 		while (!isValid(inpt.toLowerCase())) {
 			CaveExplorer.print("Please pick a card");
 			inpt = CaveExplorer.in.nextLine();
 		}
 		input = inpt;
-		
-		int card1=searchUnsortedStrings(keys,input);
-		//if (card1 >= 0 && card1<=19){
-		int card1H=card1;
-		flippedCards[card1]=card1;
+
+		int card1 = searchUnsortedStrings(keys, input);
+		// if (card1 >= 0 && card1<=19){
+		int card1H = card1;
+		flippedCards[card1] = card1;
 		flipCard(card1);
-		//keys[card1]="";
-		
+		printPic(grid);
+		// keys[card1]="";
+
 		input = CaveExplorer.in.nextLine();
 		while (!isValid(input.toLowerCase())) {
 			CaveExplorer.print("Please pick another card");
 			input = CaveExplorer.in.nextLine();
 		}
-		int card2=searchUnsortedStrings(keys,input);
-		int card2H=card2;
-		flippedCards[card2]=card2;
+		int card2 = searchUnsortedStrings(keys, input);
+		int card2H = card2;
+		flippedCards[card2] = card2;
 		flipCard(card2);
-		//keys[card2]="";
-	if(cards[card1]==cards[card2]){
-	points+=2;
-	CaveExplorer.print("Congrats! you now have "+points+" points");
-	}
-	//}
-	else{
-		keys[card1]=keysH[card1H];
-		keys[card2]=keysH[card2H];
-		flippedCards[card1]=0;
-		flippedCards[card2]=0;
-		flipCardBack(card1);
-		flipCardBack(card2);
-		
-		
-		
-	}
+		printPic(grid);
+		// keys[card2]="";
+		if (cards[card1] == cards[card2]) {
+			points += 2;
+			CaveExplorer.print("Congrats! you now have " + points + " points");
+		}
+		// }
+		else {
+			lives--;
+			System.out.println("They didn't match, you have " + lives + " tries left");
+			System.out.println("---press enter to continue---");
+			CaveExplorer.in.nextLine();
+			keys[card1] = keysH[card1H];
+			keys[card2] = keysH[card2H];
+			flippedCards[card1] = -2;
+			flippedCards[card2] = -2;
+			flipCardBack(card1);
+			flipCardBack(card2);
+			printPic(grid);
+
+		}
 
 	}
 
 	private int searchUnsortedStrings(String[] arrayToSearch, String ref) {
-		
-			for (int i = 0; i < arrayToSearch.length; i++) {
-				if (arrayToSearch[i].equals(ref.toLowerCase())) {
-					return i;
-					
-				}
+
+		for (int i = 0; i < arrayToSearch.length; i++) {
+			if (arrayToSearch[i].equals(ref.toLowerCase())) {
+				return i;
+
 			}
-			return -1;
 		}
-	
+		return -1;
+	}
 
 	private void flipCard(int i) {
-		int temp=(i/10)+(i%10);
-		int rPrint = ((i/10)*6)+4;
-		int cPrint = ((i%10)*8)+6;
-//		grid[((i/10)*6)+ 4][((i%10)*8)+6]=""+cards[i];
-		
+
+		int rPrint = ((i / 10) * 6) + 3;
+		int cPrint = ((i % 10) * 8) + 5;
+		// grid[((i/10)*6)+ 4][((i%10)*8)+6]=""+cards[i];
+		grid[((i / 10) * 6) + 6][((i % 10) * 8) + 4] = "_";
 		if (cards[i] > 9) {
 			cPrint--;
-			int digit1 = cards[i]/10;
-			int digit2 = cards[i]%10;
-			grid[rPrint][cPrint]=""+digit1;
-			grid[rPrint][cPrint+1]=""+digit2;
+			int digit1 = cards[i] / 10;
+			int digit2 = cards[i] % 10;
+			grid[rPrint][cPrint] = "" + digit1;
+			grid[rPrint][cPrint + 1] = "" + digit2;
+		} else {
+			grid[rPrint][cPrint - 1] = "" + cards[i];
 		}
-		else {
-			grid[rPrint][cPrint-1]=""+cards[i];
-		}
-		printPic(grid);
-		
+
 	}
+
+	private void flipCardSpecial(int i) {
+
+		int rPrint = ((i / 10) * 6);
+		int cPrint = ((i % 10) * 8);
+		// grid[((i/10)*6)+ 4][((i%10)*8)+6]=""+cards[i];
+		grid[rPrint][cPrint] = "";
+		grid[rPrint][cPrint] = "";
+		grid[rPrint][cPrint] = "";
+
+		grid[rPrint][cPrint] = "";
+
+	}
+
 	private void flipCardBack(int i) {
-		int temp=(i/10)+(i%10);
-		int rPrint = ((i/10)*6)+4;
-		int cPrint = ((i%10)*8)+6;
-		
-//		grid[((i/10)*6)+ 4][((i%10)*8)+6]=" ";
-		
-		
-			int digit1 = i/10;
-			int digit2 = i%10;
-			grid[rPrint][cPrint-1]=" ";
-			grid[rPrint][cPrint]=" ";
-			grid[rPrint][cPrint+1]=" ";
-		
-		
-		printPic(grid);
-		
+		int rPrint = ((i / 10) * 6) + 4;
+		int cPrint = ((i % 10) * 8) + 6;
+		grid[((i / 10) * 6) + 6][((i % 10) * 8) + 4] = "" + cards[i];
+		// grid[((i/10)*6)+ 4][((i%10)*8)+6]=" ";
+
+		grid[rPrint][cPrint - 1] = " ";
+		grid[rPrint][cPrint] = " ";
+		grid[rPrint][cPrint + 1] = " ";
+
 	}
+
 	public static void printPic(String[][] pic) {
 		for (String[] row : pic) {
 			for (String col : row) {
@@ -236,4 +258,19 @@ public class SimonRoom implements Playable {
 			System.out.print("\n");
 		}
 	}
+
+	boolean isSpecial(int value) {
+		for (int i = 0; i < special.length; i++) {
+			if (value == special[i]) {
+				return true;
+			}
+
+		}
+		return false;
+	}
+
 }
+
+/*
+ * ===1111111 --- ___ ---/_ \ --- \ | --- __/ / ---\ ___/
+ */
