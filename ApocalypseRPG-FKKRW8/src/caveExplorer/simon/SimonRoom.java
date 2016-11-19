@@ -10,9 +10,10 @@ import caveExplorer.CaveExplorer;
 import caveExplorer.Playable;
 
 public class SimonRoom implements Playable {
-	String[] keys = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t"};
+	static String[] keys = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t"};
+	static String[] keysH = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t"};
 	public int points = 0;
-	public static int[] flippedCards=new int[20];
+	static int[] flippedCards=new int[20];
 	static String cardArray[][];
 	static String[][] pic;
 	static boolean isPlaying;
@@ -35,7 +36,7 @@ public class SimonRoom implements Playable {
 		grid=newGrid(2, 10);
 		printPic(grid);
 		while(points<10){
-			interpretAction("x");
+			interpretAction();
 		}
 	}
 
@@ -51,14 +52,15 @@ public class SimonRoom implements Playable {
 				// printArrayLinear(outArray);
 				tempInt = (int) ((10) * Math.random()) + 1;
 				if (searchUnsorted(key, tempInt) >= 0) {
-					cards[i] = key[tempInt];
-					key[tempInt] = -2;
+					cards[i] = key[searchUnsorted(key, tempInt)];
+					//key[tempInt] = -2;
 					inLoop = false;
 				}
 			}
 		}
 
 	}
+
 
 	private static String[][] newGrid(int i, int j) {
 		String alphaId[]={"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t"};
@@ -120,65 +122,69 @@ public class SimonRoom implements Playable {
 	}
 	private static boolean isValid(String input) {
 		int tempAlpha = 0;
-		String[] keys = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t"};
 		for (int i=0;i<keys.length;i++) {
 			if (input.toLowerCase().equals(keys[i])){
 				tempAlpha = i;
-				break;
-				}
-			else tempAlpha=-1;
-		}
-		for (int i=0;i<keys.length;i++) {
-			if ( tempAlpha!=flippedCards[i]&&tempAlpha!=-1) {
+				
+			if (tempAlpha != flippedCards[i] && tempAlpha != -1) {
 				return true;
 			}
-			
+			}
 		}
-		
-		return false;
+		return false;	
 	}
-	public void interpretAction(String input) {
-		
-		while (!isValid(input.toLowerCase())) {
+	public void interpretAction() {
+		String inpt="";
+		String input="";
+		inpt = CaveExplorer.in.nextLine();
+		while (!isValid(inpt.toLowerCase())) {
 			CaveExplorer.print("Please pick a card");
-			input = CaveExplorer.in.nextLine();
+			inpt = CaveExplorer.in.nextLine();
 		}
-		
+		input = inpt;
 		
 		int card1=searchUnsortedStrings(keys,input);
-		String card1H=keys[card1];
+		//if (card1 >= 0 && card1<=19){
+		int card1H=card1;
 		flippedCards[card1]=card1;
 		flipCard(card1);
-		keys[card1]="z";
+		//keys[card1]="";
+		
+		input = CaveExplorer.in.nextLine();
 		while (!isValid(input.toLowerCase())) {
 			CaveExplorer.print("Please pick another card");
 			input = CaveExplorer.in.nextLine();
 		}
 		int card2=searchUnsortedStrings(keys,input);
-		String card2H=keys[card2];
+		int card2H=card2;
 		flippedCards[card2]=card2;
 		flipCard(card2);
-		keys[card1]="z";
+		//keys[card2]="";
 	if(cards[card1]==cards[card2]){
 	points+=2;
 	CaveExplorer.print("Congrats! you now have "+points+" points");
 	}
+	//}
 	else{
-		keys[card1]=card1H;
-		keys[card2]=card2H;
+		keys[card1]=keysH[card1H];
+		keys[card2]=keysH[card2H];
 		flippedCards[card1]=0;
 		flippedCards[card2]=0;
 		flipCardBack(card1);
 		flipCardBack(card2);
+		
+		
+		
 	}
 
 	}
 
-	private int searchUnsortedStrings(String[] arrayToSearch, String key) {
+	private int searchUnsortedStrings(String[] arrayToSearch, String ref) {
 		
 			for (int i = 0; i < arrayToSearch.length; i++) {
-				if (arrayToSearch[i].equalsIgnoreCase(key)) {
+				if (arrayToSearch[i].equals(ref.toLowerCase())) {
 					return i;
+					
 				}
 			}
 			return -1;
@@ -187,12 +193,38 @@ public class SimonRoom implements Playable {
 
 	private void flipCard(int i) {
 		int temp=(i/10)+(i%10);
-		grid[((i/10)*8)+ 4][(i%10)+6]=""+cards[temp];
+		int rPrint = ((i/10)*6)+4;
+		int cPrint = ((i%10)*8)+6;
+//		grid[((i/10)*6)+ 4][((i%10)*8)+6]=""+cards[i];
+		
+		if (cards[i] > 9) {
+			cPrint--;
+			int digit1 = cards[i]/10;
+			int digit2 = cards[i]%10;
+			grid[rPrint][cPrint]=""+digit1;
+			grid[rPrint][cPrint+1]=""+digit2;
+		}
+		else {
+			grid[rPrint][cPrint-1]=""+cards[i];
+		}
 		printPic(grid);
 		
 	}
 	private void flipCardBack(int i) {
-		grid[((i/10)*8)+ 4][(i%10)+6]=" ";
+		int temp=(i/10)+(i%10);
+		int rPrint = ((i/10)*6)+4;
+		int cPrint = ((i%10)*8)+6;
+		
+//		grid[((i/10)*6)+ 4][((i%10)*8)+6]=" ";
+		
+		
+			int digit1 = i/10;
+			int digit2 = i%10;
+			grid[rPrint][cPrint-1]=" ";
+			grid[rPrint][cPrint]=" ";
+			grid[rPrint][cPrint+1]=" ";
+		
+		
 		printPic(grid);
 		
 	}
