@@ -155,16 +155,16 @@ public class SimonRoom implements Playable {
 	private static boolean isValid(String input) {
 		int tempAlpha = -1;
 		for (int i = 0; i < keys.length; i++) {
-			if (input.toLowerCase().equals("skip")) {
-				points = 100;
-				break;
-			}
-			if (input.toLowerCase().equals("power")) {
-				powerUps[0] = true;
-				powerUps[1] = true;
-				powerUps[2] = true;
-				break;
-			}
+//			if (input.toLowerCase().equals("skip")) {
+//				points = 100;
+//				break;
+//			}
+//			if (input.toLowerCase().equals("power")) {
+//				powerUps[0] = true;
+//				powerUps[1] = true;
+//				powerUps[2] = true;
+//				break;
+//			}
 			if (input.toLowerCase().equals(keys[i])) {
 				tempAlpha = i;
 
@@ -182,6 +182,16 @@ public class SimonRoom implements Playable {
 		String inpt = "";
 		String input = "";
 		inpt = CaveExplorer.in.nextLine();
+		if (inpt.toLowerCase().equals("skip")) {
+			points = 100;
+			return;
+		}
+		else if (inpt.toLowerCase().equals("power")) {
+			powerUps[0] = true;
+			powerUps[1] = true;
+			powerUps[2] = true;
+			return;
+		}
 		while (!isValid(inpt.toLowerCase())) {
 			CaveExplorer.print("Please pick a card");
 			inpt = CaveExplorer.in.nextLine();
