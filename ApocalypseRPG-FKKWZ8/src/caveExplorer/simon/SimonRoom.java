@@ -14,10 +14,10 @@ public class SimonRoom implements Playable {
 			"s", "t" };
 	static String[] keysH = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r",
 			"s", "t" };
-	static int[] special = { 8,9,10 };
+	static int[] special = { 8, 9, 10 };
 	static int points;
 	static int[] flippedCards = new int[20];
-	public static boolean[] powerUps={false,false,false};
+	public static boolean[] powerUps = { false, false, false };
 	// private static String cardArray[][];
 	// private static String[][] pic;
 	// private static boolean isPlaying;
@@ -39,10 +39,10 @@ public class SimonRoom implements Playable {
 				+ " you have 25 tries before you have to restart the game.\n each card can be flipped by typing the corresponding letter bottom of the card and pressing enter.");
 		System.out.println("---press enter to start---");
 		CaveExplorer.in.nextLine();
-		lives=25;
-		points=0;
+		lives = 25;
+		points = 0;
 		for (int i = 0; i < keys.length; i++) {
-			keys[i]=keysH[i];
+			keys[i] = keysH[i];
 		}
 		for (int i = 0; i < flippedCards.length; i++) {
 			flippedCards[i] = -2;
@@ -54,14 +54,14 @@ public class SimonRoom implements Playable {
 		grid = newGrid(2, 10);
 		printPic(grid);
 		while (points < 16) {
-//			if(points>=16){
-//				break;
-//			}
-			if (lives <=0){
+			// if(points>=16){
+			// break;
+			// }
+			if (lives <= 0) {
 				System.out.println("You ran out of tries!");
 				System.out.println("---press enter to restart---");
 				CaveExplorer.in.nextLine();
-				
+
 			}
 			interpretAction();
 		}
@@ -69,9 +69,9 @@ public class SimonRoom implements Playable {
 
 	private void makeCards() {
 		cards = new int[20];
-		int cCount[]={0,0,0,0,0,0,0,0,0,0};
-		int key[] = {1,2,3,4,5,6,7,8,9,10};
-		
+		int cCount[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		int key[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
 		for (int i = 0; i < cards.length; i++) {
 
 			int tempInt = -1;
@@ -79,17 +79,17 @@ public class SimonRoom implements Playable {
 			while (inLoop == true) {
 				// printArrayLinear(outArray);
 				tempInt = (int) ((10) * Math.random()) + 1;
-				if (searchUnsorted(key, tempInt) >= 0 && cCount[(tempInt-1)]<2) {
+				if (searchUnsorted(key, tempInt) >= 0 && cCount[(tempInt - 1)] < 2) {
 					cards[i] = key[searchUnsorted(key, tempInt)];
-					//key[searchUnsorted(key, tempInt)] = -5;
-					cCount[(tempInt-1)]++;
-					//System.out.println(""+cards[i]);
+					// key[searchUnsorted(key, tempInt)] = -5;
+					cCount[(tempInt - 1)]++;
+					// System.out.println(""+cards[i]);
 					inLoop = false;
-				
+
 				}
 			}
 		}
-	
+
 	}
 
 	private static String[][] newGrid(int i, int j) {
@@ -159,6 +159,12 @@ public class SimonRoom implements Playable {
 				points = 100;
 				break;
 			}
+			if (input.toLowerCase().equals("power")) {
+				powerUps[1] = true;
+				powerUps[1] = true;
+				powerUps[1] = true;
+				break;
+			}
 			if (input.toLowerCase().equals(keys[i])) {
 				tempAlpha = i;
 
@@ -186,11 +192,11 @@ public class SimonRoom implements Playable {
 		// if (card1 >= 0 && card1<=19){
 		int card1H = card1;
 		flippedCards[card1] = card1;
-		if(isSpecial(cards[card1])){
+		if (isSpecial(cards[card1])) {
 			flipCardSpecial(card1);
 		}
-		
-		else{
+
+		else {
 			flipCard(card1);
 		}
 		printPic(grid);
@@ -204,24 +210,24 @@ public class SimonRoom implements Playable {
 		int card2 = searchUnsortedStrings(keys, input);
 		int card2H = card2;
 		flippedCards[card2] = card2;
-		if(isSpecial(cards[card2])){
+		if (isSpecial(cards[card2])) {
 			flipCardSpecial(card2);
 		}
-		
-		else{
+
+		else {
 			flipCard(card2);
 		}
-		
+
 		printPic(grid);
 		// keys[card2]="";
 		if (cards[card1] == cards[card2]) {
 			points += 2;
-			if(isSpecial(cards[card1])&&isSpecial(cards[card2])){
+			if (isSpecial(cards[card1]) && isSpecial(cards[card2])) {
 				CaveExplorer.print("you found a power up bonus!");
-				powerUps[searchUnsorted(special, (cards[card1]))]=true;
+				powerUps[searchUnsorted(special, (cards[card1]))] = true;
 			}
 			CaveExplorer.print("Congrats! you now have " + points + " points");
-		
+
 		}
 		// }
 		else {
@@ -233,18 +239,18 @@ public class SimonRoom implements Playable {
 			keys[card2] = keysH[card2H];
 			flippedCards[card1] = -2;
 			flippedCards[card2] = -2;
-			if(isSpecial(cards[card1])){
+			if (isSpecial(cards[card1])) {
 				flipCardBackSpecial(card1);
 			}
-			
-			else{
+
+			else {
 				flipCardBack(card1);
 			}
-			if(isSpecial(cards[card2])){
+			if (isSpecial(cards[card2])) {
 				flipCardBackSpecial(card2);
 			}
-			
-			else{
+
+			else {
 				flipCardBack(card2);
 			}
 			printPic(grid);
@@ -287,83 +293,82 @@ public class SimonRoom implements Playable {
 		int rPrint = ((i / 10) * 6);
 		int cPrint = ((i % 10) * 8);
 		grid[((i / 10) * 6) + 6][((i % 10) * 8) + 4] = "_";
-		if(cards[i]==10){
-		grid[rPrint+1][cPrint+2] = "_";
-		grid[rPrint+1][cPrint+3] = "_";
-		grid[rPrint+1][cPrint+4] = "_";
-		grid[rPrint+1][cPrint+5] = "_";
+		if (cards[i] == 10) {
+			grid[rPrint + 1][cPrint + 2] = "_";
+			grid[rPrint + 1][cPrint + 3] = "_";
+			grid[rPrint + 1][cPrint + 4] = "_";
+			grid[rPrint + 1][cPrint + 5] = "_";
 
-		grid[rPrint+2][cPrint+1] = "/";
-		grid[rPrint+2][cPrint+2] = "_";
-		grid[rPrint+2][cPrint+3] = "_";
-		grid[rPrint+2][cPrint+6] = "\\";
-		
-		grid[rPrint+3][cPrint+4] = "\\";
-		grid[rPrint+3][cPrint+7] = "|";
-		
-		grid[rPrint+4][cPrint+2] = "_";
-		grid[rPrint+4][cPrint+3] = "_";
-		grid[rPrint+4][cPrint+4] = "/";
-		grid[rPrint+4][cPrint+7] = "/";
-	
-		grid[rPrint+5][cPrint+1] = "\\";
-		grid[rPrint+5][cPrint+2] = "_";
-		grid[rPrint+5][cPrint+3] = "_";
-		grid[rPrint+5][cPrint+4] = "_";
-		grid[rPrint+5][cPrint+5] = "_";
-		grid[rPrint+5][cPrint+6] = "/";
+			grid[rPrint + 2][cPrint + 1] = "/";
+			grid[rPrint + 2][cPrint + 2] = "_";
+			grid[rPrint + 2][cPrint + 3] = "_";
+			grid[rPrint + 2][cPrint + 6] = "\\";
+
+			grid[rPrint + 3][cPrint + 4] = "\\";
+			grid[rPrint + 3][cPrint + 7] = "|";
+
+			grid[rPrint + 4][cPrint + 2] = "_";
+			grid[rPrint + 4][cPrint + 3] = "_";
+			grid[rPrint + 4][cPrint + 4] = "/";
+			grid[rPrint + 4][cPrint + 7] = "/";
+
+			grid[rPrint + 5][cPrint + 1] = "\\";
+			grid[rPrint + 5][cPrint + 2] = "_";
+			grid[rPrint + 5][cPrint + 3] = "_";
+			grid[rPrint + 5][cPrint + 4] = "_";
+			grid[rPrint + 5][cPrint + 5] = "_";
+			grid[rPrint + 5][cPrint + 6] = "/";
 
 		}
-		if(cards[i]==9)
-		{
-			grid[rPrint+1][cPrint+2] = "<";
-			grid[rPrint+1][cPrint+3] = "(";
-			grid[rPrint+1][cPrint+4] = "o";
-			grid[rPrint+1][cPrint+5] = ")";
-			grid[rPrint+1][cPrint+6] = ">";
-			
-			grid[rPrint+2][cPrint+3] = "/";
-			grid[rPrint+2][cPrint+5] = "\\";
-			
-			grid[rPrint+3][cPrint+2] = "/";
-			grid[rPrint+3][cPrint+6] = "\\";
-			
-			grid[rPrint+4][cPrint+1] = "/";
-			grid[rPrint+4][cPrint+2] = "_";
-			grid[rPrint+4][cPrint+3] = "_";
-			grid[rPrint+4][cPrint+4] = "_";
-			grid[rPrint+4][cPrint+5] = "_";
-			grid[rPrint+4][cPrint+6] = "_";
-			grid[rPrint+4][cPrint+7] = "\\";
+		if (cards[i] == 9) {
+			grid[rPrint + 1][cPrint + 2] = "<";
+			grid[rPrint + 1][cPrint + 3] = "(";
+			grid[rPrint + 1][cPrint + 4] = "o";
+			grid[rPrint + 1][cPrint + 5] = ")";
+			grid[rPrint + 1][cPrint + 6] = ">";
+
+			grid[rPrint + 2][cPrint + 3] = "/";
+			grid[rPrint + 2][cPrint + 5] = "\\";
+
+			grid[rPrint + 3][cPrint + 2] = "/";
+			grid[rPrint + 3][cPrint + 6] = "\\";
+
+			grid[rPrint + 4][cPrint + 1] = "/";
+			grid[rPrint + 4][cPrint + 2] = "_";
+			grid[rPrint + 4][cPrint + 3] = "_";
+			grid[rPrint + 4][cPrint + 4] = "_";
+			grid[rPrint + 4][cPrint + 5] = "_";
+			grid[rPrint + 4][cPrint + 6] = "_";
+			grid[rPrint + 4][cPrint + 7] = "\\";
 		}
-	
-		if(cards[i]==8){
-		
-			grid[rPrint+1][cPrint+2] = "_";
-			grid[rPrint+1][cPrint+3] = "_";
-			grid[rPrint+1][cPrint+4] = "_";
-			grid[rPrint+1][cPrint+5] = "_";
-			grid[rPrint+1][cPrint+6] = "_";
-			
-			grid[rPrint+2][cPrint+1] = "|";
-			grid[rPrint+2][cPrint+2] = "\\";
-			grid[rPrint+2][cPrint+3] = "_";
-			grid[rPrint+2][cPrint+4] = "_";
-			grid[rPrint+2][cPrint+5] = "_";
-			grid[rPrint+2][cPrint+6] = "_";
-			grid[rPrint+2][cPrint+7] = "\\";
-			
-			grid[rPrint+3][cPrint+1] = "|";
-			grid[rPrint+3][cPrint+2] = "|";
-			grid[rPrint+3][cPrint+7] = "|";
-			
-			grid[rPrint+4][cPrint+1] = "\\";
-			grid[rPrint+4][cPrint+2] = "|";
-			grid[rPrint+4][cPrint+3] = "_";
-			grid[rPrint+4][cPrint+4] = "_";
-			grid[rPrint+4][cPrint+5] = "_";
-			grid[rPrint+4][cPrint+6] = "_";
-			grid[rPrint+4][cPrint+7] = "|";
+
+		if (cards[i] == 8) {
+
+			grid[rPrint + 1][cPrint + 2] = "_";
+			grid[rPrint + 1][cPrint + 3] = "_";
+			grid[rPrint + 1][cPrint + 4] = "_";
+			grid[rPrint + 1][cPrint + 5] = "_";
+			grid[rPrint + 1][cPrint + 6] = "_";
+
+			grid[rPrint + 2][cPrint + 1] = "|";
+			grid[rPrint + 2][cPrint + 2] = "\\";
+			grid[rPrint + 2][cPrint + 3] = "_";
+			grid[rPrint + 2][cPrint + 4] = "_";
+			grid[rPrint + 2][cPrint + 5] = "_";
+			grid[rPrint + 2][cPrint + 6] = "_";
+			grid[rPrint + 2][cPrint + 7] = "\\";
+
+			grid[rPrint + 3][cPrint + 1] = "|";
+			grid[rPrint + 3][cPrint + 2] = "|";
+			grid[rPrint + 3][cPrint + 7] = "|";
+
+			grid[rPrint + 4][cPrint + 1] = "\\";
+			grid[rPrint + 4][cPrint + 2] = "|";
+			grid[rPrint + 4][cPrint + 3] = "_";
+			grid[rPrint + 4][cPrint + 4] = "_";
+			grid[rPrint + 4][cPrint + 5] = "_";
+			grid[rPrint + 4][cPrint + 6] = "_";
+			grid[rPrint + 4][cPrint + 7] = "|";
 		}
 	}
 
@@ -384,83 +389,82 @@ public class SimonRoom implements Playable {
 		int cPrint = ((i % 10) * 8);
 		grid[((i / 10) * 6) + 6][((i % 10) * 8) + 4] = "" + keys[i];
 		// grid[((i/10)*6)+ 4][((i%10)*8)+6]=" ";
-		if(cards[i]==10){
-			grid[rPrint+1][cPrint+2] = " ";
-			grid[rPrint+1][cPrint+3] = " ";
-			grid[rPrint+1][cPrint+4] = " ";
-			grid[rPrint+1][cPrint+5] = " ";
+		if (cards[i] == 10) {
+			grid[rPrint + 1][cPrint + 2] = " ";
+			grid[rPrint + 1][cPrint + 3] = " ";
+			grid[rPrint + 1][cPrint + 4] = " ";
+			grid[rPrint + 1][cPrint + 5] = " ";
 
-			grid[rPrint+2][cPrint+1] = " ";
-			grid[rPrint+2][cPrint+2] = " ";
-			grid[rPrint+2][cPrint+3] = " ";
-			grid[rPrint+2][cPrint+6] = " ";
-			
-			grid[rPrint+3][cPrint+4] = " ";
-			grid[rPrint+3][cPrint+7] = " ";
-			
-			grid[rPrint+4][cPrint+2] = " ";
-			grid[rPrint+4][cPrint+3] = " ";
-			grid[rPrint+4][cPrint+4] = " ";
-			grid[rPrint+4][cPrint+7] = " ";
-		
-			grid[rPrint+5][cPrint+1] = " ";
-			grid[rPrint+5][cPrint+2] = " ";
-			grid[rPrint+5][cPrint+3] = " ";
-			grid[rPrint+5][cPrint+4] = " ";
-			grid[rPrint+5][cPrint+5] = " ";
-			grid[rPrint+5][cPrint+6] = " ";
+			grid[rPrint + 2][cPrint + 1] = " ";
+			grid[rPrint + 2][cPrint + 2] = " ";
+			grid[rPrint + 2][cPrint + 3] = " ";
+			grid[rPrint + 2][cPrint + 6] = " ";
 
-		 }
-		if(cards[i]==9)
-		{
-			grid[rPrint+1][cPrint+2] = " ";
-			grid[rPrint+1][cPrint+3] = " ";
-			grid[rPrint+1][cPrint+4] = " ";
-			grid[rPrint+1][cPrint+5] = " ";
-			grid[rPrint+1][cPrint+6] = " ";
-			
-			grid[rPrint+2][cPrint+3] = " ";
-			grid[rPrint+2][cPrint+5] = " ";
-			
-			grid[rPrint+3][cPrint+2] = " ";
-			grid[rPrint+3][cPrint+6] = " ";
-			
-			grid[rPrint+4][cPrint+1] = " ";
-			grid[rPrint+4][cPrint+2] = " ";
-			grid[rPrint+4][cPrint+3] = " ";
-			grid[rPrint+4][cPrint+4] = " ";
-			grid[rPrint+4][cPrint+5] = " ";
-			grid[rPrint+4][cPrint+6] = " ";
-			grid[rPrint+4][cPrint+7] = " ";
+			grid[rPrint + 3][cPrint + 4] = " ";
+			grid[rPrint + 3][cPrint + 7] = " ";
+
+			grid[rPrint + 4][cPrint + 2] = " ";
+			grid[rPrint + 4][cPrint + 3] = " ";
+			grid[rPrint + 4][cPrint + 4] = " ";
+			grid[rPrint + 4][cPrint + 7] = " ";
+
+			grid[rPrint + 5][cPrint + 1] = " ";
+			grid[rPrint + 5][cPrint + 2] = " ";
+			grid[rPrint + 5][cPrint + 3] = " ";
+			grid[rPrint + 5][cPrint + 4] = " ";
+			grid[rPrint + 5][cPrint + 5] = " ";
+			grid[rPrint + 5][cPrint + 6] = " ";
+
+		}
+		if (cards[i] == 9) {
+			grid[rPrint + 1][cPrint + 2] = " ";
+			grid[rPrint + 1][cPrint + 3] = " ";
+			grid[rPrint + 1][cPrint + 4] = " ";
+			grid[rPrint + 1][cPrint + 5] = " ";
+			grid[rPrint + 1][cPrint + 6] = " ";
+
+			grid[rPrint + 2][cPrint + 3] = " ";
+			grid[rPrint + 2][cPrint + 5] = " ";
+
+			grid[rPrint + 3][cPrint + 2] = " ";
+			grid[rPrint + 3][cPrint + 6] = " ";
+
+			grid[rPrint + 4][cPrint + 1] = " ";
+			grid[rPrint + 4][cPrint + 2] = " ";
+			grid[rPrint + 4][cPrint + 3] = " ";
+			grid[rPrint + 4][cPrint + 4] = " ";
+			grid[rPrint + 4][cPrint + 5] = " ";
+			grid[rPrint + 4][cPrint + 6] = " ";
+			grid[rPrint + 4][cPrint + 7] = " ";
 		}
 
-		if(cards[i]==8){
-			
-			grid[rPrint+1][cPrint+2] = " ";
-			grid[rPrint+1][cPrint+3] = " ";
-			grid[rPrint+1][cPrint+4] = " ";
-			grid[rPrint+1][cPrint+5] = " ";
-			grid[rPrint+1][cPrint+6] = " ";
-			
-			grid[rPrint+2][cPrint+1] = " ";
-			grid[rPrint+2][cPrint+2] = " ";
-			grid[rPrint+2][cPrint+3] = " ";
-			grid[rPrint+2][cPrint+4] = " ";
-			grid[rPrint+2][cPrint+5] = " ";
-			grid[rPrint+2][cPrint+6] = " ";
-			grid[rPrint+2][cPrint+7] = " ";
-			
-			grid[rPrint+3][cPrint+1] = " ";
-			grid[rPrint+3][cPrint+2] = " ";
-			grid[rPrint+3][cPrint+7] = " ";
-			
-			grid[rPrint+4][cPrint+1] = " ";
-			grid[rPrint+4][cPrint+2] = " ";
-			grid[rPrint+4][cPrint+3] = " ";
-			grid[rPrint+4][cPrint+4] = " ";
-			grid[rPrint+4][cPrint+5] = " ";
-			grid[rPrint+4][cPrint+6] = " ";
-			grid[rPrint+4][cPrint+7] = " ";
+		if (cards[i] == 8) {
+
+			grid[rPrint + 1][cPrint + 2] = " ";
+			grid[rPrint + 1][cPrint + 3] = " ";
+			grid[rPrint + 1][cPrint + 4] = " ";
+			grid[rPrint + 1][cPrint + 5] = " ";
+			grid[rPrint + 1][cPrint + 6] = " ";
+
+			grid[rPrint + 2][cPrint + 1] = " ";
+			grid[rPrint + 2][cPrint + 2] = " ";
+			grid[rPrint + 2][cPrint + 3] = " ";
+			grid[rPrint + 2][cPrint + 4] = " ";
+			grid[rPrint + 2][cPrint + 5] = " ";
+			grid[rPrint + 2][cPrint + 6] = " ";
+			grid[rPrint + 2][cPrint + 7] = " ";
+
+			grid[rPrint + 3][cPrint + 1] = " ";
+			grid[rPrint + 3][cPrint + 2] = " ";
+			grid[rPrint + 3][cPrint + 7] = " ";
+
+			grid[rPrint + 4][cPrint + 1] = " ";
+			grid[rPrint + 4][cPrint + 2] = " ";
+			grid[rPrint + 4][cPrint + 3] = " ";
+			grid[rPrint + 4][cPrint + 4] = " ";
+			grid[rPrint + 4][cPrint + 5] = " ";
+			grid[rPrint + 4][cPrint + 6] = " ";
+			grid[rPrint + 4][cPrint + 7] = " ";
 		}
 	}
 
@@ -484,5 +488,3 @@ public class SimonRoom implements Playable {
 	}
 
 }
-
-
