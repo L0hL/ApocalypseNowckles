@@ -1,6 +1,12 @@
 package caveExplorer.FifteenPuzzle;
 
 import java.util.Scanner;
+
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiUnavailableException;
+
+import caveExplorer.CaveExplorer;
+import caveExplorer.maxTracey.Launchpad;
 //puzzle[0][0] = 1;
 //puzzle[0][1]= 2;
 //puzzle[0][2] = 3;
@@ -49,6 +55,14 @@ public class test {
 	private static void playGame() {
 		while (true) {
 			printPuzzle(puzzle);
+			if (CaveExplorer.useLaunchpadInput) {
+				try {
+					sendToLaunchpad(puzzle);
+				} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			System.out.println("Enter a direction to slide the tiles.");
 			String input = in.nextLine();
 			
@@ -133,5 +147,15 @@ public class test {
 	        System.out.println();
 
         }
+	}
+	
+	private static void sendToLaunchpad(String[][] puzzleStringArrArr) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
+		for (int i = 0; i < puzzleStringArrArr.length; i++) {
+			for (int j = 0; j < puzzleStringArrArr[i].length; j++) {
+				if (puzzleStringArrArr[i][j] != null || !puzzleStringArrArr[i][j].equals("")) {
+					Launchpad.display(Launchpad.launchpad, new int[] {i+4, j+4}, 5, "solid");
+				}
+			}
+		}
 	}
 }
