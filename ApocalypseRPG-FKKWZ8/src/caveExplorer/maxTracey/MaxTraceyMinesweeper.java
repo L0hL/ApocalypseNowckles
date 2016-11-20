@@ -1,6 +1,9 @@
 package caveExplorer.maxTracey;
 
+import java.util.Iterator;
+
 import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiUnavailableException;
 
 import caveExplorer.*;
@@ -11,6 +14,41 @@ public class MaxTraceyMinesweeper implements Playable {
 	
 	protected static final String cheatCode = "beatMinesweeper";
 	protected static final String loseCode = "loseMinesweeper";
+	
+	private static final String[] instructionsBasic = {
+			"Welcome to Minesweeper!",
+			"Type a space such as \"A4\" or \"5B\" to reveal that space.",
+			"Type \"mark C6\" to mark or unmark a space.",
+			"A shield will protect you if you detonate a mine."
+			};
+	
+	private static final String[] instructionsLPplusConsole = {
+			"Unrevealed spaces display as #.",
+			"They will not appear on the Launchpad until they are revealed or marked.\n",
+			
+			"Revealed spaces that are not mines will display the number of mines surrounding them.",
+			"They will appear green on the Launchpad.\n",
+			
+			"Revealed or detonated mines will display as X.",
+			"They will appear red on the Launchpad.\n",
+			
+			"Marked spaces will display as &.",
+			"They will appear orange on the Launchpad."
+			};
+	
+	private static final String[] instructionsConsole = {
+			"Unrevealed spaces display as #.",
+//			"They will not appear on the Launchpad until they are revealed or marked.",
+			
+			"Revealed spaces that are not mines will display the number of mines surrounding them.",
+//			"They will appear green on the Launchpad",
+			
+			"Revealed or detonated mines will display as X.",
+//			"They will appear red on the Launchpad.",
+			
+			"Marked spaces will display as &."
+//			"They will appear orange on the Launchpad."
+			};
 	
 	protected static boolean gameInProgress;
 	
@@ -23,7 +61,7 @@ public class MaxTraceyMinesweeper implements Playable {
 	static boolean[][] marked;
 	static int shields;
 	
-	public MaxTraceyMinesweeper(int numRows, int numCols, int numMines, int numShields) {
+	public MaxTraceyMinesweeper(int numRows, int numCols, int numMines, int numShields, boolean[] fromSimon) {
 		mines = new boolean[numRows][numCols];
 		revealed = new boolean[numRows][numCols];
 		shields = numShields;
@@ -44,14 +82,16 @@ public class MaxTraceyMinesweeper implements Playable {
 		this.eventOccurred = true;
 //		Scanner inMS = new Scanner(System.in); 
 		gameInProgress = true;
+		
+		printStrSeq(instructionsBasic);
+		System.out.println("\n");
 		if (CaveExplorer.useLaunchpadInput) {
-			try {
-				Launchpad.clearPads(Launchpad.launchpad, 15, 0);
-			} catch (InvalidMidiDataException | MidiUnavailableException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			printStrSeq(instructionsLPplusConsole);
 		}
+		else {
+			printStrSeq(instructionsConsole);
+		}
+		System.out.println("\n\n");
 		
 		if (CaveExplorer.useLaunchpadInput) {
 			new Thread() {
@@ -85,6 +125,20 @@ public class MaxTraceyMinesweeper implements Playable {
 			
 			String[][] field = createField(mines, revealed);
 			printField(field);
+			
+			if (CaveExplorer.useLaunchpadInput && mines.length <= 8 && mines[0].length <= 8) {
+				new Thread() {
+		            public void run() {
+							try {
+								sendToLaunchpad(mines, marked, revealed);
+							} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+		            	Thread.yield();
+		            	}
+		            }.start();               
+			}
 			
 			System.out.println("enter");
 			String input = CaveExplorer.in.nextLine();
@@ -146,6 +200,12 @@ public class MaxTraceyMinesweeper implements Playable {
 		
 	}
 
+	private void printStrSeq(String[] stringArr) {
+		for (String string : stringArr) {
+			System.out.println(string);
+		}
+	}
+
 	private static boolean validateAndMarkInput(String input, boolean markOnRun){
 		input = input.toLowerCase();
 		String input2 = new String();
@@ -187,13 +247,19 @@ public class MaxTraceyMinesweeper implements Playable {
 				marked[mR][mC] = mines[mR][mC];
 			}
 			else {
-				marked[mR][mC] = !marked[mR][mC];
-				String toOut = "Space " + toLtr(mR) + "" + (mC + 1) + " ";
-				if (!marked[mR][mC]) {
-					toOut += "un";
+				if (revealed[mR][mC] && !mines[mR][mC]) {
+					marked[mR][mC] = false;
+					System.out.println("Space " + toLtr(mR) + "" + (mC + 1) + " unmarked");
 				}
-				toOut += "marked.";
-				System.out.println(toOut);
+				else {
+					marked[mR][mC] = !marked[mR][mC];
+					String toOut = "Space " + toLtr(mR) + "" + (mC + 1) + " ";
+					if (!marked[mR][mC]) {
+						toOut += "un";
+					}
+					toOut += "marked.";
+					System.out.println(toOut);
+				}
 			}
 		}
 		
@@ -329,6 +395,74 @@ public class MaxTraceyMinesweeper implements Playable {
 		
 		return field;
 	}
+	
+	private static void sendToLaunchpad(boolean[][] minesArr, boolean[][] markedArr, boolean[][] revealedArr) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
+		MidiDevice launchpadOut = Launchpad.launchpad;
+
+//		Count revealed mines and revealed non-mines
+		int countRevealedMines = 0;
+		int countRevealedNonmines = 0;
+		for (int i = 0; i < minesArr.length; i++) {
+			for (int j = 0; j < minesArr[i].length; j++) {
+				if (revealedArr[i][j]) {
+					if (minesArr[i][j]) {
+						countRevealedMines++;
+					}
+					else {
+						countRevealedNonmines++;
+					}
+				}
+			}
+		}
+		
+//		Create arrays of revealed mines and revealed non-mines
+		int[][] revealedMines = new int[countRevealedMines][2];
+		int[][] revealedNonmines = new int[countRevealedNonmines][2];
+		int rmCount = 0;
+		int rnmCount = 0;
+		for (int i = 0; i < minesArr.length; i++) {
+			for (int j = 0; j < minesArr[i].length; j++) {
+				if (revealedArr[i][j]) {
+					if (minesArr[i][j]) {
+						revealedMines[rmCount] = new int[] {i, j};
+						rmCount++;
+					}
+					else {
+						revealedNonmines[rnmCount] = new int[] {i, j};
+						rnmCount++;
+					}
+				}
+			}
+		}
+		
+//		count marked non-revealed spaces
+		int countMarkedNonrevealed = 0;
+		for (int i = 0; i < minesArr.length; i++) {
+			for (int j = 0; j < minesArr[i].length; j++) {
+				if (markedArr[i][j] && !revealedArr[i][j]) {
+					countMarkedNonrevealed++;
+				}
+			}
+		}
+
+//		create array of marked non-revealed spaces
+		int[][] markedNonrevealed = new int[countMarkedNonrevealed][2];
+		int mnrCount = 0;
+		for (int i = 0; i < minesArr.length; i++) {
+			for (int j = 0; j < minesArr[i].length; j++) {
+				if (markedArr[i][j] && !revealedArr[i][j]) {
+					markedNonrevealed[mnrCount] = new int[] {i, j};
+					mnrCount++;
+				}
+			}
+		}
+		
+		Launchpad.display(launchpadOut, revealedNonmines, 22, "solid");
+		Launchpad.display(launchpadOut, revealedMines, 6, "solid");
+		Launchpad.display(launchpadOut, markedNonrevealed, 9, "solid");
+
+		
+	}
 
 	private static int countNearby(boolean[][] mines, int row, int col) {
 		/* THIS METHOD ALLOWS YOU TO BE MOST SPECIFIC
@@ -423,6 +557,10 @@ public class MaxTraceyMinesweeper implements Playable {
 				}
 				
 			}
+		}
+		if (marked[r][c] && !mines[r][c]) {
+			marked[r][c] = false;
+			System.out.println("Space " + toLtr(r) + "" + (c + 1) + " unmarked");
 		}
 	}
 	
