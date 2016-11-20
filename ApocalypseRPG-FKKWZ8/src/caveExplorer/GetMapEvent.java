@@ -3,7 +3,7 @@ package caveExplorer;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 
-public class GameStartEvent implements Playable {
+public class GetMapEvent implements Playable {
 
 	public static boolean eventOccurred = false; 
 	
@@ -18,7 +18,7 @@ public class GameStartEvent implements Playable {
 			"Take this map!"
 			};
 	
-	public GameStartEvent() {
+	public GetMapEvent() {
 		
 	}
 	
