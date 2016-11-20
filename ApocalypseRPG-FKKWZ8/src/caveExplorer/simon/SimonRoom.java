@@ -161,8 +161,8 @@ public class SimonRoom implements Playable {
 			}
 			if (input.toLowerCase().equals("power")) {
 				powerUps[1] = true;
-				powerUps[1] = true;
-				powerUps[1] = true;
+				powerUps[2] = true;
+				powerUps[3] = true;
 				break;
 			}
 			if (input.toLowerCase().equals(keys[i])) {
