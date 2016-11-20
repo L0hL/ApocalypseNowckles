@@ -61,9 +61,12 @@ public class MaxTraceyMinesweeper implements Playable {
 	static boolean[][] marked;
 	static int shields;
 	
-	public MaxTraceyMinesweeper(int numRows, int numCols, int numMines, int numShields, boolean[] fromSimon) {
+//	fromSimon: {MineReveal,ExtraShield,OtherPowerup}
+	
+	public MaxTraceyMinesweeper(int numRows, int numCols, int numMines, int numShields) {
 		mines = new boolean[numRows][numCols];
 		revealed = new boolean[numRows][numCols];
+		
 		shields = numShields;
 		
 		//number of mines is given to the player
@@ -78,10 +81,26 @@ public class MaxTraceyMinesweeper implements Playable {
 		marked = new boolean[mines.length][mines[0].length];
 	}
 	
-	public void play() throws InterruptedException {
+	public void play() throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
+		if (CaveExplorer.useLaunchpadInput) {
+			new Thread() {
+				public void run() {
+					try {
+						Launchpad.fillPads(Launchpad.launchpad, 5, "solid", 0, 25);
+						Launchpad.clearPads(Launchpad.launchpad, 0, 25);
+					} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					Thread.yield();
+				}
+			}.start();               
+		}
+
 		this.eventOccurred = true;
 //		Scanner inMS = new Scanner(System.in); 
 		gameInProgress = true;
+
 		
 		printStrSeq(instructionsBasic);
 		System.out.println("\n");
@@ -91,27 +110,24 @@ public class MaxTraceyMinesweeper implements Playable {
 		else {
 			printStrSeq(instructionsConsole);
 		}
-		System.out.println("\n\n");
+		System.out.println("\n");
 		
-		if (CaveExplorer.useLaunchpadInput) {
-			new Thread() {
-	            public void run() {
-						try {
-							Launchpad.fillPads(Launchpad.launchpad, 5, "solid", 0, 25);
-							Launchpad.clearPads(Launchpad.launchpad, 0, 25);
-						} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-	            	Thread.yield();
-	            	}
-	            }.start();               
+		if (caveExplorer.simon.SimonRoom.powerUps[1]) {
+			shields++;
+			CaveExplorer.printDelay("From the card-matching game you received an additional shield!", 30, false);
 		}
+		Thread.sleep(500);
+		System.out.println("\n");
+		System.out.println("You have " + shields + " shields.");
+		Thread.sleep(1000);
+		System.out.println("\n\n");
 //		readSequence(SEQUENCE_1, 20);
 		
 		while(gameInProgress){
+//			IF THE GAME IS WON
 			if (checkArraysEqual(mines, marked)) {
 				gameInProgress = false;
+				endAnimationLP(Launchpad.launchpad, true);
 				return;
 			}
 			
@@ -158,10 +174,12 @@ public class MaxTraceyMinesweeper implements Playable {
 //					}
 					gameInProgress = false;
 					if (input.indexOf(cheatCode) >= 0) {
+						endAnimationLP(Launchpad.launchpad, true);
 						return;
 					}
 					else {
 						loseGame();
+						endAnimationLP(Launchpad.launchpad, false);
 //						input = "A1";
 						break;
 					}
@@ -198,6 +216,28 @@ public class MaxTraceyMinesweeper implements Playable {
 		String[][] field = createField(mines, revealed);
 		printField(field);
 		
+	}
+
+	private void endAnimationLP(MidiDevice device, boolean win) {
+		if (CaveExplorer.useLaunchpadInput) {
+//			new Thread() {
+//	            public void run() {
+						int color = 5;
+						if (win) {
+							color = 21;
+						}
+						try {
+							Launchpad.fillPads(device, color, "solid", 0, 25);
+							Launchpad.clearPads(device, 0, 25);
+							Thread.sleep(500);
+						} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+//	            	Thread.yield();
+//	            	}
+//	            }.start();               
+		}
 	}
 
 	private void printStrSeq(String[] stringArr) {
@@ -281,11 +321,15 @@ public class MaxTraceyMinesweeper implements Playable {
 		return true;
 	}
 
-	private static void loseGame() {
+	private static void loseGame() throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
 		gameInProgress = false;
 		eventOccurred = false;
 		CaveExplorer.msRoom.eventHappened = false;
 //		MaxTraceyMinesweeper.eventOccurred = false;
+		
+//		throw user to previous room
+//		String[] keys = {"w", "d", "s", "a"};
+		caveExplorer.CaveExplorer.currentRoom.goToRoom(1);
 	}
 
 	private static boolean isValidSpace(int[] inArr) {

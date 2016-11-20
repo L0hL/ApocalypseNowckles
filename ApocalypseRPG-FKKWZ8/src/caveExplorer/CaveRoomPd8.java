@@ -179,7 +179,7 @@ public class CaveRoomPd8 {
 		goToRoom(indexFound);
 	}
 
-	private void goToRoom(int indexFound) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
+	public void goToRoom(int indexFound) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
 		if (borderingRooms[indexFound] != null && 
 				doors[indexFound].isOpen()) {
 			CaveExplorer.currentRoom.leave();

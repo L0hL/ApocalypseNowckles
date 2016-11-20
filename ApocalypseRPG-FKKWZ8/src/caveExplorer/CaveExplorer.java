@@ -66,7 +66,7 @@ public class CaveExplorer {
 		
 		
 		caves[1][2] = new EventRoom("This is where you found the map.", true, new GameStartEvent());
-		msRoom = new EventRoom("You beat Minesweeper here!", true, new MaxTraceyMinesweeper(8, 8, 8, 3, new boolean[] {false, false, false}));
+		msRoom = new EventRoom("You beat Minesweeper here!", true, new MaxTraceyMinesweeper(8, 8, 8, 3));
 		caves[0][2] = msRoom;
 //		caves[0][2] = new EventRoom("You beat Minesweeper here!", true, new MaxTraceyMinesweeper(8, 8, 8, 3));
 		caves[1][5] = new EventRoom("You beat Simons game here!", true, new SimonRoom());
