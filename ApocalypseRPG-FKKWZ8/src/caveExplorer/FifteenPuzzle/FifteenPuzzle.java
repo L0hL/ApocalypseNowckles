@@ -2,6 +2,8 @@ package caveExplorer.FifteenPuzzle;
 
 import java.util.Scanner;
 
+import caveExplorer.CaveExplorer;
+
 public class FifteenPuzzle {
 	public static Scanner in = new Scanner(System.in);
 	static String[][] puzzle;
@@ -12,7 +14,7 @@ public class FifteenPuzzle {
 	static int currentj;
 
 	
-	public static void main(String[] args) {
+	public static void startGame() {
 		int x = 1;
 		puzzle = new String[4][4];
 
