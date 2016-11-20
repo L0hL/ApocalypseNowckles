@@ -59,6 +59,7 @@ public class MaxTraceyMinesweeper implements Playable {
 	static boolean[][] mines;
 	static boolean[][] revealed;
 	static boolean[][] marked;
+	static int SHIELDS_ORIG;
 	static int shields;
 	
 //	fromSimon: {MineReveal,ExtraShield,OtherPowerup}
@@ -66,8 +67,8 @@ public class MaxTraceyMinesweeper implements Playable {
 	public MaxTraceyMinesweeper(int numRows, int numCols, int numMines, int numShields) {
 		mines = new boolean[numRows][numCols];
 		revealed = new boolean[numRows][numCols];
+		SHIELDS_ORIG = numShields;
 		
-		shields = numShields;
 		
 		//number of mines is given to the player
 		//each time the player marks a mine, 
@@ -82,6 +83,9 @@ public class MaxTraceyMinesweeper implements Playable {
 	}
 	
 	public void play() throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
+		
+		shields = SHIELDS_ORIG;
+		
 		if (CaveExplorer.useLaunchpadInput) {
 			new Thread() {
 				public void run() {
