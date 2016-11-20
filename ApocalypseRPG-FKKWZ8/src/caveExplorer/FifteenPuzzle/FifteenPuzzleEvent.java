@@ -1,4 +1,4 @@
-package FifteenPuzzle;
+package caveExplorer.FifteenPuzzle;
 
 
 
@@ -14,9 +14,9 @@ public class FifteenPuzzleEvent implements Playable {
 	public void play(){
 		readSequence(SEQUENCE_1);
 		System.out.println("Come on. Tell me you like puzzles. Say yes.");
-		while(FifteenPuzzle.in.nextLine().
+		while(CaveExplorer.in.nextLine().
 				toLowerCase().indexOf("yes") < 0 ){
-			FifteenPuzzle.print("C'mon! You know "
+			CaveExplorer.print("C'mon! You know "
 					+ "you like puzzles. "
 					+ "Say yes!!");
 		}
@@ -26,11 +26,10 @@ public class FifteenPuzzleEvent implements Playable {
 	
 	public static void readSequence(String[] seq){
 		for(String s : seq){
-			FifteenPuzzle.print(s);
-			FifteenPuzzle.print("- - - press enter - - -");
-			FifteenPuzzle.in.nextLine();
+			CaveExplorer.print(s);
+			CaveExplorer.print("- - - press enter - - -");
+			CaveExplorer.in.nextLine();
 		}
 	}
-
 
 }
