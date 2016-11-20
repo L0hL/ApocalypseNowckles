@@ -184,12 +184,14 @@ public class SimonRoom implements Playable {
 		inpt = CaveExplorer.in.nextLine();
 		if (inpt.toLowerCase().equals("skip")) {
 			points = 100;
+			System.out.println("Cheat code entered. Game ending.");
 			return;
 		}
 		else if (inpt.toLowerCase().equals("power")) {
 			powerUps[0] = true;
 			powerUps[1] = true;
 			powerUps[2] = true;
+			System.out.println("Cheat code entered. All Minesweeper powerups granted!");
 			return;
 		}
 		while (!isValid(inpt.toLowerCase())) {
