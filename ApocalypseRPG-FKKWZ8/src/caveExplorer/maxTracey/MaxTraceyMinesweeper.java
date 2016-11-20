@@ -56,6 +56,7 @@ public class MaxTraceyMinesweeper implements Playable {
 	static String[][] grid;
 	
 //	static Scanner in = new Scanner(System.in);
+	static int numberMines;
 	static boolean[][] mines;
 	static boolean[][] revealed;
 	static boolean[][] marked;
@@ -65,24 +66,28 @@ public class MaxTraceyMinesweeper implements Playable {
 //	fromSimon: {MineReveal,ExtraShield,OtherPowerup}
 	
 	public MaxTraceyMinesweeper(int numRows, int numCols, int numMines, int numShields) {
+		SHIELDS_ORIG = numShields;
+		numberMines = numMines;
+
 		mines = new boolean[numRows][numCols];
 		revealed = new boolean[numRows][numCols];
-		SHIELDS_ORIG = numShields;
-		
 		
 		//number of mines is given to the player
 		//each time the player marks a mine, 
 		//numOfMines minus 1 and
-		
 		//if the marked array is equal to the mines array then the player wins
-		
-		// marked = new boolean[numRows][numCols];
-		
-		plantMines(mines, numMines);
 		marked = new boolean[mines.length][mines[0].length];
+		
 	}
 	
 	public void play() throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
+		int minesL = mines.length;
+		int minesW = mines[0].length;
+		mines = new boolean[minesL][minesW];
+		revealed = new boolean[minesL][minesW];
+		marked = new boolean[mines.length][mines[0].length];
+		
+		plantMines(mines, numberMines);
 		
 		shields = SHIELDS_ORIG;
 		
@@ -116,12 +121,24 @@ public class MaxTraceyMinesweeper implements Playable {
 		}
 		System.out.println("\n");
 		
+		if (caveExplorer.simon.SimonRoom.powerUps[0]) {
+			int minesToReveal = 1;
+			autoRevealMines(minesToReveal, mines, revealed);
+			CaveExplorer.printDelay("From the card-matching game you discovered the location of " + minesToReveal + " mine", 30, false);
+			if (minesToReveal != 1 && minesToReveal != -1) {
+				CaveExplorer.printDelay("s", 30, false);
+			}
+			CaveExplorer.printDelay("!", 30, false);
+			Thread.sleep(1000);
+			System.out.println("\n\n");
+		}
+		
 		if (caveExplorer.simon.SimonRoom.powerUps[1]) {
 			shields++;
 			CaveExplorer.printDelay("From the card-matching game you received an additional shield!", 30, false);
+			Thread.sleep(500);
+			System.out.println("\n");
 		}
-		Thread.sleep(500);
-		System.out.println("\n");
 		System.out.println("You have " + shields + " shields.");
 		Thread.sleep(1000);
 		System.out.println("\n\n");
@@ -143,6 +160,12 @@ public class MaxTraceyMinesweeper implements Playable {
 //			}
 //			String[][] field = createField(mines, temp);
 			
+			String minePlural = "mine";
+			if (countUnrevealedMines(mines, revealed) != 1) {
+				minePlural += "s";
+			}
+			System.out.println(countUnrevealedMines(mines, revealed) + " " + minePlural + " remaining.\n");
+			
 			String[][] field = createField(mines, revealed);
 			printField(field);
 			
@@ -160,7 +183,7 @@ public class MaxTraceyMinesweeper implements Playable {
 		            }.start();               
 			}
 			
-			System.out.println("enter");
+//			System.out.println("enter");
 			String input = CaveExplorer.in.nextLine();
 //			while (!isValidSpace(toGridSpace(input))) {
 			while (!validateAndMarkInput(input, true)) {
@@ -194,7 +217,7 @@ public class MaxTraceyMinesweeper implements Playable {
 				int[] enteredSpace = toGridSpace(input);
 				int enteredR = toGridSpace(input)[0];
 				int enteredC = toGridSpace(input)[1];
-				System.out.println(enteredR + " " + enteredC);
+//				System.out.println(enteredR + " " + enteredC);
 				
 				revealSpace(enteredSpace, new int[] {-1,-1}, false);
 			
@@ -220,6 +243,18 @@ public class MaxTraceyMinesweeper implements Playable {
 		String[][] field = createField(mines, revealed);
 		printField(field);
 		
+	}
+
+	private int countUnrevealedMines(boolean[][] minesArr, boolean[][] revealedArr) {
+		int count = 0;
+		for (int i = 0; i < minesArr.length; i++) {
+			for (int j = 0; j < minesArr[i].length; j++) {
+				if (minesArr[i][j] && !revealedArr[i][j]) {
+					count++;
+				}
+			}
+		}
+		return count;
 	}
 
 	private void endAnimationLP(MidiDevice device, boolean win) {
@@ -256,7 +291,7 @@ public class MaxTraceyMinesweeper implements Playable {
 		input2 = input;
 		if(input.indexOf("mark") >= 0 && markOnRun){
 			input2 = input.replace("mark", "").trim();
-			System.out.println(input2);
+//			System.out.println(input2);
 			
 //			if (isValidSpace(toGridSpace(input2))) {
 //				int mR = toGridSpace(input2)[0];
@@ -568,7 +603,7 @@ public class MaxTraceyMinesweeper implements Playable {
 		}
 	}
 	
-	protected void revealSpace(int[] space, int[] oldSpace, boolean safety) {
+	private static void revealSpace(int[] space, int[] oldSpace, boolean safety) {
 		int r = space[0];
 		int c = space[1];
 		if (revealed[r][c]) {
@@ -612,7 +647,7 @@ public class MaxTraceyMinesweeper implements Playable {
 		}
 	}
 	
-	protected void explodeMine(int[] mine){
+	protected static void explodeMine(int[] mine){
 		int mR = mine[0];
 		int mC = mine[1];
 		
@@ -629,6 +664,18 @@ public class MaxTraceyMinesweeper implements Playable {
 //			System.out.println("You've lost.");
 //		}
 		
+	}
+	
+	private static void autoRevealMines(int numToReveal, boolean[][] minesArr, boolean[][] revealedArr) {
+		int revealedCount = 0;
+		for (int i = 0; i < minesArr.length; i++) {
+			for (int j = 0; j < minesArr[i].length; j++) {
+				if (minesArr[i][j] && !revealedArr[i][j] && revealedCount < numToReveal) {
+					revealSpace(new int[] {i,j}, new int[] {-1, -1}, true);
+					revealedCount++;
+				}
+			}
+		}
 	}
 	
 	private int match2dArrs(boolean[][] inArr1, boolean[][] inArr2, boolean matchType) {
