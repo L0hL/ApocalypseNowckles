@@ -213,16 +213,16 @@ public class Launchpad {
 	}
 	
 	public static void display(MidiDevice device, int[][] pxl, int color, String mode) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
+		int channel = SOLID;
+		switch (mode) {
+		case "blink": channel = FLASH;
+		case "flash": channel = FLASH;
+		case "pulse": channel = PULSE;
+		case "solid": channel = SOLID;
+		}
 		
 		for (int i = 0; i < pxl.length; i++) {
 			
-			int channel = SOLID;
-			switch (mode) {
-			case "blink": channel = FLASH;
-			case "flash": channel = FLASH;
-			case "pulse": channel = PULSE;
-			case "solid": channel = SOLID;
-			}
 			
 			
 //			int disp = keys[pxl[i][0]][pxl[i][1]];
@@ -244,7 +244,7 @@ public class Launchpad {
 	public static void display(MidiDevice device, int[] pxl, int color, String mode) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
 		
 		
-		for (int i = 0; i < pxl.length; i++) {
+		
 			
 			int channel;
 			switch (mode) {
@@ -277,7 +277,7 @@ public class Launchpad {
 //			device.getReceiver().send(msg1, -1);
 ////			Thread.sleep(1000);
 //			launchpad.getReceiver().send(msg2, -1);
-		}
+		
 	}
 	
 	public static void clearPads(MidiDevice device, int indDelay, int rowDelay) throws InvalidMidiDataException, MidiUnavailableException, InterruptedException {
