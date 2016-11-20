@@ -8,7 +8,6 @@ public class FifteenPuzzleEvent implements Playable {
 	private static final String[] SEQUENCE_1 = {"Welcome!", "This room contains the Fifteen Puzzle!", "In order to leave this room, you must complete the puzzle."};
 	private static final String[] SEQUENCE_2 ={"Here's the game","Have fun"};
 	
-	
 	public static void main(String[] args) {
 		new FifteenPuzzleEvent().play();
 	}

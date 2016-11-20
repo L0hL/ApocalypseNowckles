@@ -21,7 +21,6 @@ import java.util.Scanner;
 public class test {
 	public static Scanner in = new Scanner(System.in);
 	static String[][] puzzle;
-	static String[][] pic;
 	static int starti;
 	static int startj;
 	static int currenti;

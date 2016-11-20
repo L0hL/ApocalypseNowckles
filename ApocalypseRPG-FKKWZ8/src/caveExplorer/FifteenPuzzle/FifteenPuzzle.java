@@ -7,7 +7,6 @@ import caveExplorer.CaveExplorer;
 public class FifteenPuzzle {
 	public static Scanner in = new Scanner(System.in);
 	static String[][] puzzle;
-	static String[][] pic;
 	static int starti;
 	static int startj;
 	static int currenti;
@@ -109,8 +108,7 @@ public class FifteenPuzzle {
 		return false;
 	}
 	
-	
-	
+
 	private static void printPuzzle(String[][] puzzle) {
 		for(String[] row : puzzle) {
 			for (String i : row) {
