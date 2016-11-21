@@ -5,21 +5,16 @@ import javax.sound.midi.MidiUnavailableException;
 
 import caveExplorer.maxTracey.Launchpad;
 
-public class GetMapEvent implements Playable {
+public class GetWood implements Playable {
 
 	public static boolean eventOccurred = false; 
 	
 	private static final String[] SEQUENCE_1 = {
-			"You hear the crunch of paper under your foot.",
-			"You look down and see what appears to be a map.",
-			" - - - - press enter to pick up the map - - - - "
+			"The entire room is filled with wood of various lengths.",
+			" - - - - press enter to pick up wood - - - - "
 			};
 	
-	private static final String[] SEQUENCE_2 = {
-			"Jackpot! You found a map of the mineshaft!"
-			};
-	
-	public GetMapEvent() {
+	public GetWood() {
 		
 	}
 	
@@ -41,9 +36,7 @@ public class GetMapEvent implements Playable {
 		}
 		readSequenceAuto(SEQUENCE_1, 20, 500);
 		CaveExplorer.in.nextLine();
-		readSequenceAuto(SEQUENCE_2, 20, 500);
-		Thread.sleep(500);
-		CaveExplorer.inventory.setHasMap(true);
+		CaveExplorer.inventory.setHasWood(true);
 		if (CaveExplorer.useLaunchpadInput) {
 			Launchpad.clearPads(Launchpad.launchpad, 0, 0);
 			new Thread() {
@@ -58,7 +51,7 @@ public class GetMapEvent implements Playable {
 	            	}
 	            }.start();               
 		}
-		CaveExplorer.printDelay("You obtained a map!", 20, true);
+		CaveExplorer.printDelay("You obtained wood!", 20, true);
 		Thread.sleep(2000);
 	}
 	

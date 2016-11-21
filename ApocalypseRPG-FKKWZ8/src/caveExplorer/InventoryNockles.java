@@ -8,6 +8,9 @@ import caveExplorer.maxTracey.Launchpad;
 public class InventoryNockles {
 	
 	protected boolean hasMap;
+	protected static boolean hasWood;
+	protected static boolean hasHammer;
+	protected static boolean hasNails;
 	private String map;
 	
 	public static final int NORTH = 0;
@@ -148,6 +151,18 @@ public class InventoryNockles {
 
 	public void setHasMap(boolean b) {
 		hasMap = b;
+	}
+
+	public void setHasNails(boolean b) {
+		hasNails = b;
+	}
+	
+	public void setHasHammer(boolean b) {
+		hasHammer = b;
+	}
+	
+	public void setHasWood(boolean b) {
+		hasWood = b;
 	}
 	
 

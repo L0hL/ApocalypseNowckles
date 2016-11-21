@@ -74,14 +74,18 @@ public class CaveExplorer {
 		caves[1][2] = new EventRoom("This is where you found the map.", true, new GetMapEvent());
 		
 		msRoom = new EventRoom("You beat Minesweeper here!", true, new MaxTraceyMinesweeper(8, 8, 8, 3));
-		caves[0][2] = msRoom;
+		caves[5][4] = msRoom;
 		
 
 		fcRoom = new EventRoom("You beat Simons game here!", true, new SimonRoom());
 		caves[1][5] = fcRoom;
 		
 		ftpRoom = new EventRoom("You beat 15 game here!", true, new FifteenPuzzleEvent());
-		caves[1][0] = ftpRoom;
+		caves[0][2] = ftpRoom;
+		
+		caves[0][1] = new EventRoom("You found the wood here.", true, new GetWood());
+		caves[3][3] = new EventRoom("You found the hammer here.", true, new GetHammer());
+		caves[5][2] = new EventRoom("You found the nails here.", true, new GetNails());
 		
 		caves[1][1].setConnection(CaveRoomPd8.WEST, caves[1][0], new Door());
 		caves[1][1].setConnection(CaveRoomPd8.SOUTH, caves[2][1], new Door());
@@ -97,6 +101,19 @@ public class CaveExplorer {
 		caves[0][4].setConnection(CaveRoomPd8.EAST, caves[0][5], new Door());
 		
 		caves[0][5].setConnection(CaveRoomPd8.SOUTH, caves[1][5], new Door());
+		
+		caves[5][2].setConnection(CaveRoomPd8.EAST, caves[5][3], new Door());
+		caves[5][3].setConnection(CaveRoomPd8.EAST, caves[5][4], new Door());
+		caves[5][4].setConnection(CaveRoomPd8.NORTH, caves[4][4], new Door());
+		caves[4][4].setConnection(CaveRoomPd8.NORTH, caves[3][4], new Door());
+		
+		caves[3][4].setConnection(CaveRoomPd8.WEST, caves[3][3], new Door());
+		caves[3][4].setConnection(CaveRoomPd8.EAST, caves[3][5], new Door());
+		
+		caves[3][5].setConnection(CaveRoomPd8.NORTH, caves[2][5], new Door());
+		caves[2][5].setConnection(CaveRoomPd8.NORTH, caves[1][5], new Door());
+		
+		caves[0][1].setConnection(CaveRoomPd8.EAST, caves[0][2], new Door());
 		
 
 		cavesHidden[2][4] = true;
@@ -115,7 +132,7 @@ public class CaveExplorer {
 
 	private static void startExploring() throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
 		int[] center = {1,1};
-		while (true) {
+		while (!(InventoryNockles.hasHammer && InventoryNockles.hasWood && InventoryNockles.hasNails)) {
 			new Thread() {
 				public void run() {
 					if (useLaunchpadInput) {
@@ -190,6 +207,11 @@ public class CaveExplorer {
 			act(consoleInput);
 
 		}
+		
+		caves[1][1] = new EventRoom("", true, new EndGame());
+		currentRoom = caves[1][1];
+		currentRoom.enter();
+		
 	}
 
 

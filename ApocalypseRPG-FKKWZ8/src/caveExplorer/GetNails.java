@@ -5,21 +5,18 @@ import javax.sound.midi.MidiUnavailableException;
 
 import caveExplorer.maxTracey.Launchpad;
 
-public class GetMapEvent implements Playable {
+public class GetNails implements Playable {
 
 	public static boolean eventOccurred = false; 
 	
 	private static final String[] SEQUENCE_1 = {
-			"You hear the crunch of paper under your foot.",
-			"You look down and see what appears to be a map.",
-			" - - - - press enter to pick up the map - - - - "
+			"A shimmer of light comes from a small metal box across the room.",
+			"The box is labeled \"NAILS.\"",
+			"You open the box to find it is indeed full of nails.",
+			" - - - - press enter to pick up the nails - - - - "
 			};
 	
-	private static final String[] SEQUENCE_2 = {
-			"Jackpot! You found a map of the mineshaft!"
-			};
-	
-	public GetMapEvent() {
+	public GetNails() {
 		
 	}
 	
@@ -41,9 +38,7 @@ public class GetMapEvent implements Playable {
 		}
 		readSequenceAuto(SEQUENCE_1, 20, 500);
 		CaveExplorer.in.nextLine();
-		readSequenceAuto(SEQUENCE_2, 20, 500);
-		Thread.sleep(500);
-		CaveExplorer.inventory.setHasMap(true);
+		CaveExplorer.inventory.setHasNails(true);
 		if (CaveExplorer.useLaunchpadInput) {
 			Launchpad.clearPads(Launchpad.launchpad, 0, 0);
 			new Thread() {
@@ -58,7 +53,7 @@ public class GetMapEvent implements Playable {
 	            	}
 	            }.start();               
 		}
-		CaveExplorer.printDelay("You obtained a map!", 20, true);
+		CaveExplorer.printDelay("You obtained a box of nails!", 20, true);
 		Thread.sleep(2000);
 	}
 	
