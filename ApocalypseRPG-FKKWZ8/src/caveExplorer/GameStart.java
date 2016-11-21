@@ -31,7 +31,11 @@ public class GameStart implements Playable {
 			new Thread() {
 	            public void run() {
 						try {
-							Launchpad.flashImg(Launchpad.launchpad, Launchpad.exclamationMark, 3, 250, 250, 3, 0, 50, 0, 50, false);
+							for (int i = 0; i < 50; i++) {
+								
+								Launchpad.chase(Launchpad.launchpad, Launchpad.SQUARES_OUTWARD, i, "solid", 20, 0, 0, true);
+								Launchpad.clearPads(Launchpad.launchpad, 0, 0);
+							}
 						} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();

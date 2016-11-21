@@ -128,6 +128,85 @@ public class Launchpad {
 			{7,3},
 			{7,4},
 			};
+	
+	public static final int[][] SQUARE2X2 = {
+			{3,3},
+			{3,4},
+			{4,3},
+			{4,4},
+			};
+	
+	public static final int[][] SQUARE4X4 = {
+			{2,2},
+			{2,3},
+			{2,4},
+			{2,5},
+			{3,2},
+			{3,5},
+			{4,2},
+			{4,5},
+			{5,2},
+			{5,3},
+			{5,4},
+			{5,5}
+			};
+	
+	public static final int[][] SQUARE6X6 = {
+			{1,1},
+			{1,2},
+			{1,3},
+			{1,4},
+			{1,5},
+			{1,6},
+			{2,1},
+			{2,6},
+			{3,1},
+			{3,6},
+			{4,1},
+			{4,6},
+			{5,1},
+			{5,6},
+			{6,1},
+			{6,2},
+			{6,3},
+			{6,4},
+			{6,5},
+			{6,6}
+			};
+	
+	public static final int[][] SQUARE8X8 = {
+			{0,0},
+			{0,1},
+			{0,2},
+			{0,3},
+			{0,4},
+			{0,5},
+			{0,6},
+			{0,7},
+			{1,0},
+			{1,7},
+			{2,0},
+			{2,7},
+			{3,0},
+			{3,7},
+			{4,0},
+			{4,7},
+			{5,0},
+			{5,7},
+			{6,0},
+			{6,7},
+			{7,0},
+			{7,1},
+			{7,2},
+			{7,3},
+			{7,4},
+			{7,5},
+			{7,6},
+			{7,7},
+			};
+	
+	public static final int[][][] SQUARES_OUTWARD = new int[][][] {SQUARE2X2, SQUARE4X4, SQUARE6X6, SQUARE8X8};
+			
 			
 	
 	public static int lastKeyPressed = 0;
@@ -531,6 +610,18 @@ public class Launchpad {
 		}
 		return -1;
 	}
+	
+	public static void chase(MidiDevice device, int[][][] steps, int color, String mode, long stepDelay, int indDelay, int rowDelay, boolean clearAfterStep) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
+		for (int i = 0; i < steps.length; i++) {
+//			display(device, steps[i], color, mode);
+			displayDelay(device, steps[i], color, mode, indDelay, rowDelay);
+			Thread.sleep(stepDelay);
+			if (clearAfterStep) {
+				clearPads(device, indDelay, rowDelay);
+			}
+		}
+	}
+	
 }
 
 
