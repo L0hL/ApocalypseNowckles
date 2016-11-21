@@ -33,7 +33,7 @@ public class Launchpad {
 	public static final int NOTE_ON = 0x90;
 	
 	
-	protected static int[][] messageOutline = {
+	public static int[][] messageOutline = {
 			{0,1},
 			{0,2},
 			{0,3},
@@ -57,7 +57,7 @@ public class Launchpad {
 			{6,1}
 			};
 	
-	protected static int[][] exclamationMark = {
+	public static int[][] exclamationMark = {
 			{0,3},
 			{0,4},
 			{1,3},
@@ -75,7 +75,7 @@ public class Launchpad {
 			{7,4},
 			};
 	
-	protected static int[][] plus6x6 = {
+	public static int[][] plus6x6 = {
 			{1,3},
 			{1,4},
 			{2,3},
@@ -101,7 +101,7 @@ public class Launchpad {
 			{6,4},
 			};
 
-	protected static int[][] questionMark = {
+	public static int[][] questionMark = {
 			{0,2},
 			{0,3},
 			{0,4},

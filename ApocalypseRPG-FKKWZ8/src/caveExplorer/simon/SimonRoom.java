@@ -4,10 +4,12 @@ package caveExplorer.simon;
 //import java.util.Scanner;
 
 import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiUnavailableException;
 
 import caveExplorer.CaveExplorer;
 import caveExplorer.Playable;
+import caveExplorer.maxTracey.Launchpad;
 
 public class SimonRoom implements Playable {
 	static String[] keys = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r",
@@ -20,7 +22,8 @@ public class SimonRoom implements Playable {
 	public static boolean[] powerUps = { false, false, false };
 	// private static String cardArray[][];
 	// private static String[][] pic;
-	// private static boolean isPlaying;
+	protected static boolean gameInProgress;
+	public static boolean eventOccurred = false;
 	private static String grid[][];
 	static int[] cards;
 	// private static String[] alphaId=new String[20];
@@ -29,7 +32,21 @@ public class SimonRoom implements Playable {
 	@Override
 	public void play() throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
 		// TODO Auto-generated method stub
-
+		eventOccurred = true;
+		if (CaveExplorer.useLaunchpadInput) {
+			new Thread() {
+				public void run() {
+					try {
+						Launchpad.fillPads(Launchpad.launchpad, 13, "solid", 0, 50);
+						Launchpad.clearPads(Launchpad.launchpad, 0, 50);
+					} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					Thread.yield();
+				}
+			}.start();               
+		}
 		makeGame();
 
 	}
@@ -39,7 +56,7 @@ public class SimonRoom implements Playable {
 				+ " you have 25 tries before you have to restart the game.\n each card can be flipped by typing the corresponding letter bottom of the card and pressing enter.");
 		System.out.println("---press enter to start---");
 		CaveExplorer.in.nextLine();
-		lives = 25;
+		lives = 5;
 		points = 0;
 		for (int i = 0; i < keys.length; i++) {
 			keys[i] = keysH[i];
@@ -53,18 +70,58 @@ public class SimonRoom implements Playable {
 		makeCards();
 		grid = newGrid(2, 10);
 		printPic(grid);
-		while (points < 16) {
+		while (points < 16 && lives > 0) {
 			// if(points>=16){
 			// break;
 			// }
-			if (lives <= 0) {
-				System.out.println("You ran out of tries!");
-				System.out.println("---press enter to restart---");
-				CaveExplorer.in.nextLine();
-
-			}
+//			if (lives <= 0) {
+//				System.out.println("You ran out of tries!");
+//				System.out.println("---press enter to restart---");
+//				CaveExplorer.in.nextLine();
+//
+//			}
 			interpretAction();
 		}
+		if (points < 16) {
+			CaveExplorer.printDelay("You ran out of lives with less than 16 points.     (press enter)", 30, true);
+		}
+		else if (lives <= 0) {
+			CaveExplorer.printDelay("You ran out of lives with 16 points or more.         (press enter)", 30, true);
+			CaveExplorer.in.nextLine();
+			CaveExplorer.printDelay("This is not the optimal outcome, but regardless,     (press enter)", 30, true);
+		}
+		else {
+			CaveExplorer.printDelay("You matched all the cards!     (press enter)", 30, true);
+		}
+		CaveExplorer.in.nextLine();
+		if (CaveExplorer.useLaunchpadInput) {
+			new Thread() {
+				public void run() {
+					
+					endAnimationLP(Launchpad.launchpad, (points >= 16));
+					
+					Thread.yield();
+				}
+			}.start();
+		}
+		if (points >= 16) {
+			CaveExplorer.printDelay("You win!", 30, true);
+			Thread.sleep(1000);
+			CaveExplorer.printDelay("Exiting game...", 30, true);
+			Thread.sleep(1000);
+		}
+		else {
+			CaveExplorer.printDelay("You lose.               ", 30, false);
+			Thread.sleep(1000);
+			CaveExplorer.printDelay("Returning to the previous room...", 30, true);
+			Thread.sleep(1000);
+		}
+		
+		if (points < 16) {
+			loseGame();
+		}
+		Thread.sleep(2000);
+		
 	}
 
 	private void makeCards() {
@@ -179,6 +236,7 @@ public class SimonRoom implements Playable {
 	}
 
 	public void interpretAction() {
+		printPic(grid);
 		String inpt = "";
 		String input = "";
 		inpt = CaveExplorer.in.nextLine();
@@ -265,7 +323,7 @@ public class SimonRoom implements Playable {
 			else {
 				flipCardBack(card2);
 			}
-			printPic(grid);
+//			printPic(grid);
 
 		}
 
@@ -499,4 +557,37 @@ public class SimonRoom implements Playable {
 		return false;
 	}
 
+	private static void loseGame() throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
+		gameInProgress = false;
+		eventOccurred = false;
+		CaveExplorer.fcRoom.eventHappened = false;
+		
+//		throw user to previous room
+//		String[] keys = {"w", "d", "s", "a"};
+		caveExplorer.CaveExplorer.currentRoom.goToRoom(0);
+	}
+	
+	private void endAnimationLP(MidiDevice device, boolean win) {
+		if (CaveExplorer.useLaunchpadInput) {
+//			new Thread() {
+//	            public void run() {
+						int color = 5;
+						if (win) {
+							color = 21;
+						}
+						try {
+							Launchpad.fillPads(device, color, "solid", 0, 100);
+							Thread.sleep(1000);
+							Launchpad.clearPads(device, 0, 100);
+//							Thread.sleep(500);
+						} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+//	            	Thread.yield();
+//	            	}
+//	            }.start();               
+		}
+	}
+	
 }

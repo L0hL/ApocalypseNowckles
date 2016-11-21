@@ -3,14 +3,16 @@ package caveExplorer;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 
+import caveExplorer.maxTracey.Launchpad;
+
 public class GetMapEvent implements Playable {
 
 	public static boolean eventOccurred = false; 
 	
 	private static final String[] SEQUENCE_1 = {
-			"[A little yellow mouse with brown stripes and a lightning shaped tail runs up to you.]",
-			"Hi. I can see you're not from around here.",
-			"Do you like puzzles?"
+			"You hear the crunch of paper under your foot.",
+			"You look down and see what appears to be a map.",
+			" - - - - press enter to pick up the map - - - - "
 			};
 	
 	private static final String[] SEQUENCE_2 = {
@@ -24,57 +26,41 @@ public class GetMapEvent implements Playable {
 	
 	public void play() throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
 		eventOccurred = true;
-//		if (CaveExplorer.useLaunchpadInput) {
-//			Launchpad.clearPads(Launchpad.launchpad, 15, 0);
-//			new Thread() {
-//	            public void run() {
-//						try {
-//							Launchpad.flashImg(Launchpad.launchpad, Launchpad.messageOutline, 3, 250, 250, 3, 0, 50, 0, 50, false);
-//						} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}
-//	            	Thread.yield();
-//	            	}
-//	            }.start();               
-//		}
-//		readSequence(SEQUENCE_1, 20);
-//		if (CaveExplorer.useLaunchpadInput) {
-//			Launchpad.clearPads(Launchpad.launchpad, 0, 0);
-//			new Thread() {
-//	            public void run() {
-//						try {
-//							Launchpad.flashImg(Launchpad.launchpad, Launchpad.questionMark, 3, 250, 250, 3, 0, 25, 0, 25, false);
-//						} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}
-//	            	Thread.yield();
-//	            	}
-//	            }.start();               
-//		}
-//		while (CaveExplorer.in.nextLine().toLowerCase().indexOf("yes") < 0) {
-//			CaveExplorer.printDelay("C'mon! You know you like puzzles! Say yes!", 20, true);
-//		}
-//		readSequence(SEQUENCE_2, 10);
-//		Thread.sleep(500);
+		if (CaveExplorer.useLaunchpadInput) {
+			Launchpad.clearPads(Launchpad.launchpad, 15, 0);
+			new Thread() {
+	            public void run() {
+						try {
+							Launchpad.flashImg(Launchpad.launchpad, Launchpad.exclamationMark, 3, 250, 250, 3, 0, 50, 0, 50, false);
+						} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+	            	Thread.yield();
+	            	}
+	            }.start();               
+		}
+		readSequenceAuto(SEQUENCE_1, 20, 500);
+		CaveExplorer.in.nextLine();
+		readSequence(SEQUENCE_2, 10);
+		Thread.sleep(500);
 		CaveExplorer.inventory.setHasMap(true);
-//		if (CaveExplorer.useLaunchpadInput) {
-//			Launchpad.clearPads(Launchpad.launchpad, 0, 0);
-//			new Thread() {
-//	            public void run() {
-//	            	try {
-//	            		Launchpad.flashImg(Launchpad.launchpad, Launchpad.plus6x6, 13, 67, 125, 5, 0, 0, 0, 0, false);
-//	            	} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
-//	            		// TODO Auto-generated catch block
-//	            		e.printStackTrace();
-//	            	}
-//	            	Thread.yield();
-//	            	}
-//	            }.start();               
-//		}
+		if (CaveExplorer.useLaunchpadInput) {
+			Launchpad.clearPads(Launchpad.launchpad, 0, 0);
+			new Thread() {
+	            public void run() {
+	            	try {
+	            		Launchpad.flashImg(Launchpad.launchpad, Launchpad.plus6x6, 13, 67, 125, 5, 0, 0, 0, 0, false);
+	            	} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
+	            		// TODO Auto-generated catch block
+	            		e.printStackTrace();
+	            	}
+	            	Thread.yield();
+	            	}
+	            }.start();               
+		}
 		CaveExplorer.printDelay("You obtained a map!", 20, true);
-//		Thread.sleep(2000);
+		Thread.sleep(2000);
 	}
 	
 	public static void readSequence(String[] seq, long charDelay) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException{
@@ -88,6 +74,13 @@ public class GetMapEvent implements Playable {
 		}
 		CaveExplorer.printDelay(seq[seq.length - 1], charDelay, true);
 		System.out.print("\n");
+	}
+	
+	public static void readSequenceAuto(String[] seq, long charDelay, long stringDelay) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException{
+		for (int s = 0; s < seq.length; s++) {
+			CaveExplorer.printDelay(seq[s], charDelay, true);
+			Thread.sleep(stringDelay);
+		}
 	}
 
 }
