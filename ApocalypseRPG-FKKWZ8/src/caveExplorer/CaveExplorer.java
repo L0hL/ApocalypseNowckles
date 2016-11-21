@@ -85,7 +85,9 @@ public class CaveExplorer {
 		
 		caves[0][3].setConnection(CaveRoomPd8.EAST, caves[0][4], new Door());
 		caves[0][3].setConnection(CaveRoomPd8.WEST, caves[0][2], new Door());
+		
 		caves[0][4].setConnection(CaveRoomPd8.EAST, caves[0][5], new Door());
+		
 		caves[0][5].setConnection(CaveRoomPd8.SOUTH, caves[1][5], new Door());
 		
 
