@@ -56,7 +56,7 @@ public class SimonRoom implements Playable {
 				+ " you have 25 tries before you have to restart the game.\n each card can be flipped by typing the corresponding letter bottom of the card and pressing enter.");
 		System.out.println("---press enter to start---");
 		CaveExplorer.in.nextLine();
-		lives = 5;
+		lives = 25;
 		points = 0;
 		for (int i = 0; i < keys.length; i++) {
 			keys[i] = keysH[i];
