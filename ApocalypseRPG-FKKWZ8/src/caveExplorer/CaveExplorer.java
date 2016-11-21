@@ -5,6 +5,8 @@ import java.util.Scanner;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 
+import caveExplorer.FifteenPuzzle.FifteenPuzzle;
+import caveExplorer.FifteenPuzzle.FifteenPuzzleEvent;
 import caveExplorer.maxTracey.Launchpad;
 import caveExplorer.maxTracey.MaxTraceyMinesweeper;
 import caveExplorer.simon.SimonRoom;
@@ -20,6 +22,7 @@ public class CaveExplorer {
 	
 	public static EventRoom msRoom;
 	public static EventRoom fcRoom;
+	public static EventRoom ftpRoom;
 	
 	protected static boolean[][] cavesHidden;
 
@@ -76,6 +79,9 @@ public class CaveExplorer {
 
 		fcRoom = new EventRoom("You beat Simons game here!", true, new SimonRoom());
 		caves[1][5] = fcRoom;
+		
+		ftpRoom = new EventRoom("You beat 15 game here!", true, new FifteenPuzzleEvent());
+		caves[1][0] = ftpRoom;
 		
 		caves[1][1].setConnection(CaveRoomPd8.WEST, caves[1][0], new Door());
 		caves[1][1].setConnection(CaveRoomPd8.SOUTH, caves[2][1], new Door());

@@ -10,14 +10,23 @@ public class GameStart implements Playable {
 	public static boolean eventOccurred = false; 
 	
 	private static final String[] SEQUENCE_1 = {
-			"You hear the crunch of paper under your foot.",
-			"You look down and see what appears to be a map.",
-			" - - - - press enter to pick up the map - - - - "
+			"The war started with a tweet...",
+			"All hope of diplomacy between nations fell apart.",
+			"With no other options, humanity took to the underground to survive.",
+			"It is a difficult life, with many perils.",
+			"One such peril is falling into abandoned mines.",
+			"Every year, dozens of people fall into the mines, never to be seen again.",
+			"This is the story of a survivor."
 			};
 	
 	private static final String[] SEQUENCE_2 = {
-			"You are going to have so much fun playing my 2D games.",
-			"Take this map!"
+			"Above you, you can see the whole you fell through.",
+			"Your neighbor shouts down from above.",
+			"\"Stay calm! It doesn't appear that deep!\"",
+			"\"You should be able to build a ladder from what's down there!\"",
+			"\"Just find some wood, nails, and a hammer!\"",
+			"\"They've gotta be down there. It WAS a mineshaft, after all!\"",
+			"\"Good luck!\""
 			};
 	
 	public GameStart() {
@@ -26,23 +35,27 @@ public class GameStart implements Playable {
 	
 	public void play() throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
 		eventOccurred = true;
+//		readSequenceAuto(SEQUENCE_1, 40, 3000);
+		System.out.println("- - - press enter - - -");
+		CaveExplorer.in.nextLine();
+//		readSequenceAuto(SEQUENCE_2, 20, 1000);
 		if (CaveExplorer.useLaunchpadInput) {
-			Launchpad.clearPads(Launchpad.launchpad, 15, 0);
-			new Thread() {
-	            public void run() {
+//			Launchpad.clearPads(Launchpad.launchpad, 15, 0);
+//			new Thread() {
+//	            public void run() {
 						try {
-							for (int i = 0; i < 50; i++) {
+							for (int i = 0; i < 4; i++) {
 								
-								Launchpad.chase(Launchpad.launchpad, Launchpad.SQUARES_OUTWARD, i, "solid", 20, 0, 0, true);
+								Launchpad.chase(Launchpad.launchpad, Launchpad.SQUARES_OUTWARD, i, "solid", 100, 0, 0, true);
 								Launchpad.clearPads(Launchpad.launchpad, 0, 0);
 							}
 						} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-	            	Thread.yield();
-	            	}
-	            }.start();               
+//	            	Thread.yield();
+//	            	}
+//	            }.start();               
 		}
 	}
 	
@@ -62,7 +75,9 @@ public class GameStart implements Playable {
 	public static void readSequenceAuto(String[] seq, long charDelay, long stringDelay) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException{
 		for (int s = 0; s < seq.length; s++) {
 			CaveExplorer.printDelay(seq[s], charDelay, true);
-			Thread.sleep(stringDelay);
+			if (s < seq.length - 1) {
+				Thread.sleep(stringDelay);
+			}
 		}
 	}
 

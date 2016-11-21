@@ -2,7 +2,11 @@ package caveExplorer.FifteenPuzzle;
 //by Jimmy
 import java.util.Scanner;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiUnavailableException;
+
 import caveExplorer.CaveExplorer;
+import caveExplorer.maxTracey.Launchpad;
 
 public class FifteenPuzzle {
 	public static Scanner in = new Scanner(System.in);
@@ -11,6 +15,7 @@ public class FifteenPuzzle {
 	static int startj;
 	static int currenti;
 	static int currentj;
+	private static final String cheatCode = "beat15";
 
 	
 	public static void startGame() {
@@ -23,7 +28,7 @@ public class FifteenPuzzle {
 			}
 		}
 	
-		randomize.solution(puzzle);
+		Randomize.solution(puzzle);
 		createNull(puzzle);
 		playGame();
 	}
@@ -42,16 +47,63 @@ public class FifteenPuzzle {
 	}
 	
 	private static void playGame() {
-		while (true) {
+		currenti = starti;
+		currentj = startj;
+		boolean stayInGame = true;
+		while (stayInGame) {
 			winGame(puzzle);
 			printPuzzle(puzzle);
-			System.out.println("Enter a direction to slide the tiles.");
+			if (CaveExplorer.useLaunchpadInput) {
+				try {
+					Launchpad.clearPads(Launchpad.launchpad, 0, 0);
+					sendToLaunchpad(puzzle);
+				} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			System.out.println("Enter a direction to slide the tile.");
 			String input = in.nextLine();
-			
-			int[] newCoordinates = interpretInput(input);
-			starti = newCoordinates[0];
-			startj = newCoordinates[1];
-			puzzle[starti][startj] = "";
+			if (input.equals(cheatCode)) {
+				stayInGame = false;
+				
+				System.out.println("Cheat code entered.");
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				System.out.println("Exiting game.");
+				if (CaveExplorer.useLaunchpadInput) {
+//					new Thread() {
+//						public void run() {
+							try {
+								Launchpad.displayDelay(Launchpad.launchpad, Launchpad.SQUARE4X4SOLID, 21, "solid", 25, 0);
+								Thread.sleep(1000);
+								Launchpad.clearPads(Launchpad.launchpad, 0, 50);
+							} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+//							Thread.yield();
+//						}
+//					}.start();               
+				}
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+//				return;
+			}
+			else {
+				int[] newCoordinates = interpretInput(input);
+				starti = newCoordinates[0];
+				startj = newCoordinates[1];
+				puzzle[starti][startj] = "";
+			}
 		}
 	}
 	private static int[] interpretInput(String input) {
@@ -73,7 +125,7 @@ public class FifteenPuzzle {
 			newCoordinates[0]=currenti;
 			newCoordinates[1]=currentj;
 		}else{
-			System.out.println("Sorry, you cannot slide tiles in this direction anymore.");
+			System.out.println("Sorry, you cannot slide the tile in this direction anymore.");
 		}
 		return newCoordinates;
 	}
@@ -81,25 +133,29 @@ public class FifteenPuzzle {
 
 
 	private static void checkSpace(String input) {
-		if(input.equals("w")) {
+		if(input.equals("s")) {
+//		if(input.equals("w")) {
 			currenti++;
 			if (currenti < 4) {
 				puzzle[starti][startj] = puzzle[starti+1][startj];
 			}
 		}
-		if(input.equals("s")) {
+		if(input.equals("w")) {
+//		if(input.equals("s")) {
 			currenti--;	
 			if (currenti > -1) {
 				puzzle[starti][startj] = puzzle[starti-1][startj];
 			}	
 		}
-		if(input.equals("a")) {
+		if(input.equals("d")) {
+//		if(input.equals("a")) {
 			currentj++;
 			if (currentj < 4) {
 				puzzle[starti][startj] = puzzle[starti][startj+1];
 			}	
 		}
-		if(input.equals("d")) {
+		if(input.equals("a")) {
+//		if(input.equals("d")) {
 			currentj--;
 			if (currentj > -1) {
 				puzzle[starti][startj] = puzzle[starti][startj-1];
@@ -114,6 +170,20 @@ public class FifteenPuzzle {
 				 && puzzle[1][3].equals("8") && puzzle[2][0].equals("9") && puzzle[2][1].equals("10")
 				 && puzzle[2][2].equals("11") && puzzle[2][3].equals("12") && puzzle[3][0].equals("13")
 				 && puzzle[3][1].equals("14") && puzzle[3][2].equals("15")) {
+			if (CaveExplorer.useLaunchpadInput) {
+				new Thread() {
+					public void run() {
+						try {
+							Launchpad.displayDelay(Launchpad.launchpad, Launchpad.SQUARE4X4SOLID, 21, "solid", 25, 0);
+							Launchpad.clearPads(Launchpad.launchpad, 0, 50);
+						} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						Thread.yield();
+					}
+				}.start();               
+			}
 			System.out.println("You have completed the game! You may escape.");
 			System.out.println("The door opens and you leave the room.");
 			
@@ -141,5 +211,34 @@ public class FifteenPuzzle {
 	        System.out.println();
 
         }
+	}
+	private static void sendToLaunchpad(String[][] puzzleStringArrArr) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
+		for (int i = 0; i < puzzleStringArrArr.length; i++) {
+			for (int j = 0; j < puzzleStringArrArr[i].length; j++) {
+				Launchpad.display(Launchpad.launchpad, new int[] {i+2, j+2}, 5, "solid");
+			}
+		}
+		int dispY = currenti;
+		if (currenti >= puzzleStringArrArr.length) {
+			dispY = puzzleStringArrArr.length - 1;
+		}
+		else if (currenti < 0) {
+			dispY = 0;
+		}
+		
+		int dispX = currentj;
+		if (currentj >= puzzleStringArrArr[dispY].length) {
+			dispX = puzzleStringArrArr[dispY].length - 1;
+		}
+		else if (currentj < 0) {
+			dispX = 0;
+		}
+		
+		dispY += 2;
+		dispX += 2;
+		if (0 <= dispY && dispY <= 7 && 0 <= dispX && dispX <= 7) {
+			Launchpad.display(Launchpad.launchpad, new int[] {dispY, dispX}, 3, "solid");
+		}
+		
 	}
 }
