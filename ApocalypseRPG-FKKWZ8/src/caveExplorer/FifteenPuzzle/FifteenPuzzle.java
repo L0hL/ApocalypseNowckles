@@ -14,27 +14,18 @@ public class FifteenPuzzle {
 
 	
 	public static void startGame() {
-		int x = 1;
 		puzzle = new String[4][4];
-
-		for (int i = 0; i < puzzle.length; i++) {
-			for (int j = 0; j < puzzle[i].length; j++) {
-				puzzle[i][j] = ""+x;
-				x++;
-			}
-		}
-		starti = 3;
-		startj = 3;
-		puzzle[starti][startj] = "";
+		//need to 
 		
 		playGame();
 		
 	}
-	
+	//
 	
 	private static void playGame() {
 		while (true) {
 			printPuzzle(puzzle);
+			winGame(puzzle);
 			CaveExplorer.print("Enter a direction to slide the tiles.");
 			String input = in.nextLine();
 			
@@ -69,6 +60,18 @@ public class FifteenPuzzle {
 		
 	
 		return newCoordinates;
+	}
+	
+	private static void winGame(String[][] puzzle) {
+		
+		if (puzzle[0][0].equals("1") && puzzle[0][1].equals("2") && puzzle[0][2].equals("3") && puzzle[0][3].equals("4")
+				 && puzzle[1][0].equals("5") && puzzle[1][1].equals("6") && puzzle[1][2].equals("7")
+				 && puzzle[1][3].equals("8") && puzzle[2][0].equals("9") && puzzle[2][1].equals("10")
+				 && puzzle[2][2].equals("11") && puzzle[2][3].equals("12") && puzzle[3][0].equals("13")
+				 && puzzle[3][1].equals("14") && puzzle[3][2].equals("15")) {
+			System.out.println("You have completed the game! You may escape.");
+			System.out.println("The door opens and you leave the room.");
+		}
 	}
 	
 	private static void checkSpace(String input) {
