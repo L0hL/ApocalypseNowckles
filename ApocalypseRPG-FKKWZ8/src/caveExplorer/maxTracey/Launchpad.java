@@ -205,6 +205,25 @@ public class Launchpad {
 			{7,7},
 			};
 	
+	public static final int[][] SQUARE4X4SOLID = {
+			{2,2},
+			{2,3},
+			{2,4},
+			{2,5},
+			{3,2},
+			{3,3},
+			{3,4},
+			{3,5},
+			{4,2},
+			{4,3},
+			{4,4},
+			{4,5},
+			{5,2},
+			{5,3},
+			{5,4},
+			{5,5}
+			};
+	
 	public static final int[][][] SQUARES_OUTWARD = new int[][][] {SQUARE2X2, SQUARE4X4, SQUARE6X6, SQUARE8X8};
 			
 			
@@ -540,7 +559,7 @@ public class Launchpad {
 
 
 
-	private static void displayDelay(MidiDevice device, int[][] pxls, int color, String mode, int indDelay, int rowDelay) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
+	public static void displayDelay(MidiDevice device, int[][] pxls, int color, String mode, int indDelay, int rowDelay) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
 		int[][] sortedPixels = new int[pxls.length][2];
 		
 		int count = 0;
