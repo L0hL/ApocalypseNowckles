@@ -1,92 +1,154 @@
 package caveExplorer.FifteenPuzzle;
 
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Random;
 import java.util.Scanner;
 
-
-public class Randomize {
-	private static void shuffleArray(String[][] arr) {		
-			for (int i = 0; i < arr.length; i++) {
-				for (int j = 0; j < arr[i].length; j++) {
-					int shuffleRow = (int)(Math.random()*arr.length);
-					int shuffleCol = (int)(Math.random()*arr[i].length);
-					String holder = arr[i][j];
-					arr[i][j] = arr[shuffleRow][shuffleCol];
-					arr[shuffleRow][shuffleCol] = holder;
+public class FifteenPuzzle{
+	public static Scanner in = new Scanner(System.in);
+	static String[][] puzzle;
+	static String[][] puzzleWin;
+	static int starti;
+	static int startj;
+	static int currenti;
+	static int currentj;
+	static boolean playing = true;
+	
+	public static void startGame() {
+		puzzle = new String[4][4];
+		int x = 1;
+		for (int i = 0; i < puzzle.length; i++) {
+			for (int j = 0; j < puzzle[i].length; j++) {
+				puzzle[i][j] = ""+x;
+				x++;
+			}
+		}
+	
+		randomize.solution(puzzle);
+		createNull(puzzle);
+		playGame();
+	}
+	
+	private static void createNull(String[][] puzzle) {
+		for (int i = 0; i < puzzle.length; i++) {
+			for (int j = 0; j < puzzle[i].length; j++) {
+				if (puzzle[i][j].equals ("16")) {
+					puzzle[i][j] = "";
+					starti = i;
+					startj = j;
 				}
 				
 			}
-		
+		}
 	}
-	public static void solution(String[][] a){
-		shuffleArray(a);
-		int positionX = 0;
-		int positionY = 0;
-		String[][]placer = a;
+	
+	private static void playGame() {
+		while (playing = true) {
+			winGame(puzzle);
+			printPuzzle(puzzle);
+			System.out.println("Enter a direction to slide the tiles.");
+			String input = in.nextLine();
+			
+			int[] newCoordinates = interpretInput(input);
+			starti = newCoordinates[0];
+			startj = newCoordinates[1];
+			puzzle[starti][startj] = "";
+		}
+	}
+	private static int[] interpretInput(String input) {
+		//verify input is valid
 		
+		while(!isValid(input)){
+			System.out.println("Please enter a valid direction to slide: w = up, s = down, a  = left, d = right.");
+			input = in.nextLine();
+		}
+		currenti = starti;
+		currentj = startj;
+		input = input.toLowerCase();
+		cheat(input);
+		checkSpace(input);
 		
+		int[] newCoordinates = {starti,startj};
 		
-		
-		for (int row = 0; row < placer.length; row++) {
-			for (int col = 0; col < placer[row].length; col++) {
-				if(placer[row][col].equals("_")){
-					placer[row][col] = "16";
-					positionX =row;
-					positionY = col;
+		if(currenti>=0 && currenti < puzzle.length &&
+				currentj >=0 && currentj < puzzle[0].length){
+			newCoordinates[0]=currenti;
+			newCoordinates[1]=currentj;
+		}else{
+			System.out.println("Sorry, you cannot slide tiles in this direction anymore.");
+		}
+		return newCoordinates;
+	}
+	
+
+
+	private static void checkSpace(String input) {
+		if(input.equals("w")) {
+			currenti++;
+			if (currenti < 4) {
+				puzzle[starti][startj] = puzzle[starti+1][startj];
+			}
+		}
+		if(input.equals("s")) {
+			currenti--;	
+			if (currenti > -1) {
+				puzzle[starti][startj] = puzzle[starti-1][startj];
+			}	
+		}
+		if(input.equals("a")) {
+			currentj++;
+			if (currentj < 4) {
+				puzzle[starti][startj] = puzzle[starti][startj+1];
+			}	
+		}
+		if(input.equals("d")) {
+			currentj--;
+			if (currentj > -1) {
+				puzzle[starti][startj] = puzzle[starti][startj-1];
+			}	
+		}
+	}
+	private static void cheat(String input) {
+		if (input.equals("abc")) {
+			puzzleWin = new String[4][4];
+			int x = 1;
+			for (int i = 0; i < puzzleWin.length; i++) {
+				for (int j = 0; j < puzzleWin[i].length; j++) {
+					puzzleWin[i][j] = ""+x;
+					x++;
 				}
 			}
-
-		
+			puzzleWin[3][3] = "";
+			printPuzzle(puzzleWin);
+			System.out.println("You have completed the game! You may escape.");
+			System.out.println("The door opens and you leave the room.");
+			playing = false;
 		}
-		String[] container = new String [16];
-		int count = 0;
-		for (int row = 0; row < placer.length; row++) {
-			
-			for (int col = 0; col < placer[row].length; col++) {
-				container[count] = placer[row][col];
-				count++;
+	}
+	private static void winGame(String[][] puzzle) {
+		
+		if (puzzle[0][0].equals("1") && puzzle[0][1].equals("2") && puzzle[0][2].equals("3") && puzzle[0][3].equals("4")
+				 && puzzle[1][0].equals("5") && puzzle[1][1].equals("6") && puzzle[1][2].equals("7")
+				 && puzzle[1][3].equals("8") && puzzle[2][0].equals("9") && puzzle[2][1].equals("10")
+				 && puzzle[2][2].equals("11") && puzzle[2][3].equals("12") && puzzle[3][0].equals("13")
+				 && puzzle[3][1].equals("14") && puzzle[3][2].equals("15")) {
+			System.out.println("You have completed the game! You may escape.");
+			System.out.println("The door opens and you leave the room.");
+			playing = false;
+		}
+	}
+	//
+	private static boolean isValid(String in) {
+		String[] validKeys = {"w","a","s","d","abc"};
+		for(String key: validKeys){
+			if(in.toLowerCase().equals(key)){
+				return true;
 			}
 		}
-		
-		
-		int[] intArr = new int [container.length];
-		for (int i = 0; i < intArr.length; i++) {
-			intArr[i] = Integer.parseInt(container[i]);
-		}
-
-		int inversions = 0;
-		for (int i = 0; i < intArr.length - 1; i++){
-		    int tempLowIndex = i;
-		    for (int j = i + 1; j < intArr.length; j++){
-		        if (intArr[j] <intArr[tempLowIndex]){
-		            tempLowIndex = j;
-		        }
-		    }
-		   if(tempLowIndex!=i){
-		         swap(intArr, tempLowIndex, i);
-		        inversions++;
-		   } 
-		   }
-		if(((positionX+2)%2 == 0 && inversions%2 ==0) ||((positionY+2)%2 ==1 && inversions%2 ==1)  ){
-			solution(a);
-		}
-		//
-		
-		//a[positionX][positionY] = _;
-	}
-	
-	private static void swap(int[] arr, int idx1, int idx2) {
-		int temp = arr[idx1];
-		arr[idx1] = arr[idx2];
-		arr[idx2] = temp;
-		
+		return false;
 	}
 	
 	
-
+	
 	private static void printPuzzle(String[][] puzzle) {
 		for(String[] row : puzzle) {
 			for (String i : row) {
@@ -97,12 +159,4 @@ public class Randomize {
 
         }
 	}
-		// Checks to see if container is working.
-	public static void printArr(int ar[]){
-		for (int i = 0; i < ar.length; i++) {
-			System.out.print(ar[i] + " ");
-		}
-	System.out.println();
-	}
-	
 }
