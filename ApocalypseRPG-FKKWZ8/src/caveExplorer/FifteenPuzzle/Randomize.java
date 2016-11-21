@@ -1,4 +1,4 @@
-package CaveExplorer.FifteenPuzzle;
+package caveExplorer.FifteenPuzzle;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
