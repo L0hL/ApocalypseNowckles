@@ -2,6 +2,8 @@ package caveExplorer.FifteenPuzzle;
 
 import java.util.Scanner;
 
+import caveExplorer.CaveExplorer;
+
 public class FifteenPuzzle {
 	public static Scanner in = new Scanner(System.in);
 	static String[][] puzzle;
@@ -10,7 +12,7 @@ public class FifteenPuzzle {
 	static int startj;
 	static int currenti;
 	static int currentj;
-	static boolean playing = true;
+	static boolean cheat;
 
 	public static void startGame() {
 		puzzle = new String[4][4];
@@ -22,9 +24,10 @@ public class FifteenPuzzle {
 			}
 		}
 
-		randomize.solution(puzzle);
+		Randomize.solution(puzzle);
 		createNull(puzzle);
 		playGame();
+		cheat = false;
 	}
 
 	private static void createNull(String[][] puzzle) {
@@ -41,10 +44,13 @@ public class FifteenPuzzle {
 	}
 
 	private static void playGame() {
-		while (playing = true) {
+		while (true) {
+			if (cheat)
+				break;
 			winGame(puzzle);
 			printPuzzle(puzzle);
-			System.out.println("Enter a direction to slide the tiles.");
+			CaveExplorer.print("Enter a direction to swipe the tiles.");
+			System.out.println();
 			String input = in.nextLine();
 
 			int[] newCoordinates = interpretInput(input);
@@ -58,7 +64,7 @@ public class FifteenPuzzle {
 		// verify input is valid
 
 		while (!isValid(input)) {
-			System.out.println("Please enter a valid direction to slide: w = up, s = down, a  = left, d = right.");
+			CaveExplorer.print("Please enter a valid direction to slide: w = up, s = down, a  = left, d = right.");
 			input = in.nextLine();
 		}
 		currenti = starti;
@@ -73,7 +79,7 @@ public class FifteenPuzzle {
 			newCoordinates[0] = currenti;
 			newCoordinates[1] = currentj;
 		} else {
-			System.out.println("Sorry, you cannot slide tiles in this direction anymore.");
+			System.out.println("Sorry, you cannot swipe tiles in this direction anymore.");
 		}
 		return newCoordinates;
 	}
@@ -109,6 +115,10 @@ public class FifteenPuzzle {
 		if (input.equals("abc")) {
 			puzzleWin = new String[4][4];
 			int x = 1;
+
+			CaveExplorer.print("Wow you loser. Is the game too hard for you?");
+			CaveExplorer
+					.print("Well it's ok. Here's the completed puzzle and your exit. Please leave now you sore loser.");
 			for (int i = 0; i < puzzleWin.length; i++) {
 				for (int j = 0; j < puzzleWin[i].length; j++) {
 					puzzleWin[i][j] = "" + x;
@@ -117,9 +127,8 @@ public class FifteenPuzzle {
 			}
 			puzzleWin[3][3] = "";
 			printPuzzle(puzzleWin);
-			System.out.println("You have completed the game! You may escape.");
-			System.out.println("The door opens and you leave the room.");
-			playing = false;
+			CaveExplorer.print("Bye bye.");
+			cheat = true;
 		}
 	}
 
@@ -132,7 +141,7 @@ public class FifteenPuzzle {
 				&& puzzle[3][1].equals("14") && puzzle[3][2].equals("15")) {
 			System.out.println("You have completed the game! You may escape.");
 			System.out.println("The door opens and you leave the room.");
-			playing = false;
+			cheat = true;
 		}
 	}
 
