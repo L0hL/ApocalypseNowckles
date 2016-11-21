@@ -2,39 +2,18 @@ package caveExplorer.FifteenPuzzle;
 
 import java.util.Scanner;
 
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiUnavailableException;
-
-import caveExplorer.CaveExplorer;
-import caveExplorer.maxTracey.Launchpad;
-//puzzle[0][0] = 1;
-//puzzle[0][1]= 2;
-//puzzle[0][2] = 3;
-//puzzle[0][3] = 4;
-//puzzle[1][0]= 5;
-//puzzle[1][1] = 6;
-//puzzle[1][2] = 7;
-//puzzle[1][3] = 8;
-//puzzle[2][0]= 9;
-//puzzle[2][1] = 10;
-//puzzle[2][2] = 11;
-//puzzle[2][3] = 12;
-//puzzle[3][0] = 13;
-//puzzle[3][1]= 14;
-//puzzle[3][2]= 15;
-//puzzle[3][3] = 0;
-
 public class test {
 	public static Scanner in = new Scanner(System.in);
 	static String[][] puzzle;
+	static String[][] puzzleWin;
 	static int starti;
 	static int startj;
 	static int currenti;
 	static int currentj;
-
+	static int x = 1;
 	
 	public static void main(String[] args) {
-		int x = 1;
+	
 		puzzle = new String[4][4];
 
 		for (int i = 0; i < puzzle.length; i++) {
@@ -43,26 +22,29 @@ public class test {
 				x++;
 			}
 		}
-		starti = 3;
-		startj = 3;
-		puzzle[starti][startj] = "";
-		
+	
+		randomize.solution(puzzle);
+		createNull(puzzle);
 		playGame();
-		
 	}
 	
+	private static void createNull(String[][] puzzle) {
+		for (int i = 0; i < puzzle.length; i++) {
+			for (int j = 0; j < puzzle[i].length; j++) {
+				if (puzzle[i][j].equals ("16")) {
+					puzzle[i][j] = "";
+					starti = i;
+					startj = j;
+				}
+				
+			}
+		}
+	}
 	
 	private static void playGame() {
 		while (true) {
+			winGame(puzzle);
 			printPuzzle(puzzle);
-			if (CaveExplorer.useLaunchpadInput) {
-				try {
-					sendToLaunchpad(puzzle);
-				} catch (InterruptedException | InvalidMidiDataException | MidiUnavailableException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
 			System.out.println("Enter a direction to slide the tiles.");
 			String input = in.nextLine();
 			
@@ -72,10 +54,9 @@ public class test {
 			puzzle[starti][startj] = "";
 		}
 	}
-
-	
 	private static int[] interpretInput(String input) {
 		//verify input is valid
+		
 		while(!isValid(input)){
 			System.out.println("Please enter a valid direction to slide: w = up, s = down, a  = left, d = right.");
 			input = in.nextLine();
@@ -94,11 +75,11 @@ public class test {
 		}else{
 			System.out.println("Sorry, you cannot slide tiles in this direction anymore.");
 		}
-		
-	
 		return newCoordinates;
 	}
 	
+
+
 	private static void checkSpace(String input) {
 		if(input.equals("w")) {
 			currenti++;
@@ -126,6 +107,18 @@ public class test {
 		}
 	}
 	
+	private static void winGame(String[][] puzzle) {
+		
+		if (puzzle[0][0].equals("1") && puzzle[0][1].equals("2") && puzzle[0][2].equals("3") && puzzle[0][3].equals("4")
+				 && puzzle[1][0].equals("5") && puzzle[1][1].equals("6") && puzzle[1][2].equals("7")
+				 && puzzle[1][3].equals("8") && puzzle[2][0].equals("9") && puzzle[2][1].equals("10")
+				 && puzzle[2][2].equals("11") && puzzle[2][3].equals("12") && puzzle[3][0].equals("13")
+				 && puzzle[3][1].equals("14") && puzzle[3][2].equals("15")) {
+			System.out.println("You have completed the game! You may escape.");
+			System.out.println("The door opens and you leave the room.");
+		}
+	}
+	//
 	private static boolean isValid(String in) {
 		String[] validKeys = {"w","a","s","d"};
 		for(String key: validKeys){
@@ -147,15 +140,5 @@ public class test {
 	        System.out.println();
 
         }
-	}
-	
-	private static void sendToLaunchpad(String[][] puzzleStringArrArr) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
-		for (int i = 0; i < puzzleStringArrArr.length; i++) {
-			for (int j = 0; j < puzzleStringArrArr[i].length; j++) {
-				if (puzzleStringArrArr[i][j] != null || !puzzleStringArrArr[i][j].equals("")) {
-					Launchpad.display(Launchpad.launchpad, new int[] {i+4, j+4}, 5, "solid");
-				}
-			}
-		}
 	}
 }
