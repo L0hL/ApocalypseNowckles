@@ -56,7 +56,7 @@ public class Randomize {
 		for (int i = 0; i < intArr.length; i++) {
 			intArr[i] = Integer.parseInt(container[i]);
 		}
-
+//https://www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html
 		int inversions = 0;
 		for (int i = 0; i < intArr.length - 1; i++){
 		    int tempLowIndex = i;
