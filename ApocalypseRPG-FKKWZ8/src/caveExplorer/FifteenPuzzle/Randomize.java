@@ -1,31 +1,14 @@
 package caveExplorer.FifteenPuzzle;
+
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 import java.util.Scanner;
-public class Randomize {
-	private static final String _ = null;
-	public static void main(String[] args) {
-		String[] [] arr = { 
-				{"1", "2", "3", "4"} , 
-				{ "5", "6", "7","8"},
-				{ "9","10","11","12",},
-				{"13", "14", "15", "_"},
-				};
-		System.out.println("You win the game if you can make the board look like"
-				+ " this.");
-		printArray(arr);
-		System.out.println("Here is the randomized puzzle."
-				);
-		solution(arr);
-		printArray(arr);
-		
-	}
-		
-		
-		
-		
-		private static void shuffleArray(String[][] arr) {		
+
+
+public class randomize {
+	private static void shuffleArray(String[][] arr) {		
 			for (int i = 0; i < arr.length; i++) {
 				for (int j = 0; j < arr[i].length; j++) {
 					int shuffleRow = (int)(Math.random()*arr.length);
@@ -38,7 +21,7 @@ public class Randomize {
 			}
 		
 	}
-	private static void solution(String[][] a){
+	public static void solution(String[][] a){
 		shuffleArray(a);
 		int positionX = 0;
 		int positionY = 0;
@@ -55,6 +38,7 @@ public class Randomize {
 					positionY = col;
 				}
 			}
+
 		
 		}
 		String[] container = new String [16];
@@ -72,6 +56,7 @@ public class Randomize {
 		for (int i = 0; i < intArr.length; i++) {
 			intArr[i] = Integer.parseInt(container[i]);
 		}
+
 		int inversions = 0;
 		for (int i = 0; i < intArr.length - 1; i++){
 		    int tempLowIndex = i;
@@ -101,14 +86,16 @@ public class Randomize {
 	}
 	
 	
-	public static void printArray(String[][] arr){
-		for (int row = 0; row < arr.length; row++) {
-			for (int col = 0; col < arr[row].length; col++) {
-				System.out.print(arr[row][col] + " ");
-				
-			}
-			System.out.println();
-		}
+
+	private static void printPuzzle(String[][] puzzle) {
+		for(String[] row : puzzle) {
+			for (String i : row) {
+	            System.out.print(i);
+	            System.out.print("\t");
+	        }
+	        System.out.println();
+
+        }
 	}
 		// Checks to see if container is working.
 	public static void printArr(int ar[]){
