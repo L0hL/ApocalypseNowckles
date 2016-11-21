@@ -1,4 +1,4 @@
-package caveExplorer.FifteenPuzzle;
+package caveExplorer.jimmyIvan;
 
 
 import java.util.Arrays;

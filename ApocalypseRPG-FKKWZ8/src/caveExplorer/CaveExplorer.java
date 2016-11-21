@@ -5,11 +5,9 @@ import java.util.Scanner;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 
-import caveExplorer.FifteenPuzzle.FifteenPuzzle;
-import caveExplorer.FifteenPuzzle.FifteenPuzzleEvent;
-import caveExplorer.maxTracey.Launchpad;
-import caveExplorer.maxTracey.MaxTraceyMinesweeper;
-import caveExplorer.simon.SimonRoom;
+import caveExplorer.maxTracey.*;
+import caveExplorer.simon.*;
+import caveExplorer.jimmyIvan.*;
 
 public class CaveExplorer {
 	

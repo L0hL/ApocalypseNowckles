@@ -12,7 +12,8 @@ public class MaxTraceyMinesweeper implements Playable {
 
 	public static boolean eventOccurred = false;
 	
-	protected static final String cheatCode = "beatMinesweeper";
+//	protected static final String cheatCode = "beatMinesweeper";
+	protected static final String cheatCode = "LRLRS&D&U&TBBABS";
 	protected static final String loseCode = "loseMinesweeper";
 	
 	private static final String[] instructionsBasic = {
@@ -193,6 +194,13 @@ public class MaxTraceyMinesweeper implements Playable {
 				}
 				else {
 					System.out.println("Cheat code entered. Exiting.");
+					if (input.indexOf(cheatCode) >= 0) {
+						System.out.print("(Yes, that was the cheat code.)     ");
+						Thread.sleep(2000);
+						System.out.print("(I'm a shameless weeb.)");
+						Thread.sleep(1000);
+						System.out.print("\n");
+					}
 //					for (int i = 0; i < revealed.length; i++) {
 //						for (int j = 0; j < field.length; j++) {
 //							

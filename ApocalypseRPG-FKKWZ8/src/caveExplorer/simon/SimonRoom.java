@@ -52,9 +52,12 @@ public class SimonRoom implements Playable {
 	}
 
 	public void makeGame() throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
-		System.out.println("to win you must get 16 points by finding pairs of matching cards.\n"
-				+ " you have 25 tries before you have to restart the game.\n each card can be flipped by typing the corresponding letter bottom of the card and pressing enter.");
+		System.out.println("Welcome to a card-matching game!");
+		System.out.println("To win you must get 16 points by finding pairs of matching cards.");
+		System.out.println("You have 25 tries before you have to restart the game.");
+		System.out.println("Each card can be flipped by typing the corresponding letter at the bottom of the card and pressing enter.");
 		System.out.println("---press enter to start---");
+		System.out.print("\n");
 		CaveExplorer.in.nextLine();
 		lives = 25;
 		points = 0;

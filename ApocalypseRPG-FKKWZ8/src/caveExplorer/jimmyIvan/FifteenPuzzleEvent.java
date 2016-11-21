@@ -1,4 +1,4 @@
-package caveExplorer.FifteenPuzzle;
+package caveExplorer.jimmyIvan;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
@@ -8,8 +8,8 @@ import caveExplorer.Playable;
 
 public class FifteenPuzzleEvent implements Playable {
 
-	private static final String[] SEQUENCE_1 = {"Welcome!", "This room contains the Fifteen Puzzle!", "In order to leave this room, you must complete the puzzle.", "Would you like to play?"};
-	private static final String[] SEQUENCE_2 ={"Here's the game","Have fun"};
+	private static final String[] SEQUENCE_1 = {"This room contains the Fifteen Puzzle!", "In order to leave this room, you must complete the puzzle.", "Would you like to play?"};
+	private static final String[] SEQUENCE_2 = {"No turning back now."};
 	
 	public static void main(String[] args) {
 		new FifteenPuzzleEvent().play();

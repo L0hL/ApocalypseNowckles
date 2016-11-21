@@ -1,4 +1,4 @@
-package caveExplorer.FifteenPuzzle;
+package caveExplorer.jimmyIvan;
 //by Jimmy
 import java.util.Scanner;
 

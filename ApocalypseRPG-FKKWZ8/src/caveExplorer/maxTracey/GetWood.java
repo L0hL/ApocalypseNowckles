@@ -1,22 +1,21 @@
-package caveExplorer;
+package caveExplorer.maxTracey;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 
+import caveExplorer.*;
 import caveExplorer.maxTracey.Launchpad;
 
-public class GetNails implements Playable {
+public class GetWood implements Playable {
 
 	public static boolean eventOccurred = false; 
 	
 	private static final String[] SEQUENCE_1 = {
-			"A shimmer of light comes from a small metal box across the room.",
-			"The box is labeled \"NAILS.\"",
-			"You open the box to find it is indeed full of nails.",
-			" - - - - press enter to pick up the nails - - - - "
+			"The entire room is filled with wood of various lengths.",
+			" - - - - press enter to pick up wood - - - - "
 			};
 	
-	public GetNails() {
+	public GetWood() {
 		
 	}
 	
@@ -38,7 +37,7 @@ public class GetNails implements Playable {
 		}
 		readSequenceAuto(SEQUENCE_1, 20, 500);
 		CaveExplorer.in.nextLine();
-		CaveExplorer.inventory.setHasNails(true);
+		CaveExplorer.inventory.setHasWood(true);
 		if (CaveExplorer.useLaunchpadInput) {
 			Launchpad.clearPads(Launchpad.launchpad, 0, 0);
 			new Thread() {
@@ -53,7 +52,7 @@ public class GetNails implements Playable {
 	            	}
 	            }.start();               
 		}
-		CaveExplorer.printDelay("You obtained a box of nails!", 20, true);
+		CaveExplorer.printDelay("You obtained wood!", 20, true);
 		Thread.sleep(2000);
 	}
 	

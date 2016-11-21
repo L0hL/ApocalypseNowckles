@@ -1,8 +1,10 @@
-package caveExplorer;
+package caveExplorer.maxTracey;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 
+import caveExplorer.CaveExplorer;
+import caveExplorer.Playable;
 import caveExplorer.maxTracey.Launchpad;
 
 public class GetHammer implements Playable {

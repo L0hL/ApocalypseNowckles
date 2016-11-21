@@ -1,8 +1,9 @@
-package caveExplorer;
+package caveExplorer.maxTracey;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 
+import caveExplorer.*;
 import caveExplorer.maxTracey.Launchpad;
 
 public class EndGame implements Playable {
@@ -36,7 +37,8 @@ public class EndGame implements Playable {
 //	            }
 //			}.start();               
 		}
-		System.out.println("you win");
+//		System.out.println("you win");
+		CaveExplorer.printDelay("\n\n\n\nYou win.", 333, false);
 		System.exit(0);
 	}
 	

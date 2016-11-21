@@ -1,8 +1,9 @@
-package caveExplorer;
+package caveExplorer.maxTracey;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 
+import caveExplorer.*;
 import caveExplorer.maxTracey.Launchpad;
 
 public class GameStart implements Playable {
@@ -15,17 +16,19 @@ public class GameStart implements Playable {
 			"With no other options, humanity took to the underground to survive.",
 			"It is a difficult life, with many perils.",
 			"One such peril is falling into abandoned mines.",
+			"Legend tells that the mineshafts were enchanted to ward off looters.",
+			"To find anything valuable, trespassers must pass a plethora of grueling games.",
 			"Every year, dozens of people fall into the mines, never to be seen again.",
 			"This is the story of a survivor."
 			};
 	
 	private static final String[] SEQUENCE_2 = {
-			"Above you, you can see the whole you fell through.",
+			"Above you, you can see the hole you fell through.",
 			"Your neighbor shouts down from above.",
 			"\"Stay calm! It doesn't appear that deep!\"",
 			"\"You should be able to build a ladder from what's down there!\"",
 			"\"Just find some wood, nails, and a hammer!\"",
-			"\"They've gotta be down there. It WAS a mineshaft, after all!\"",
+			"\"They've gotta be down there. It IS a mineshaft, after all!\"",
 			"\"Good luck!\""
 			};
 	
@@ -35,10 +38,11 @@ public class GameStart implements Playable {
 	
 	public void play() throws InterruptedException, InvalidMidiDataException, MidiUnavailableException {
 		eventOccurred = true;
-//		readSequenceAuto(SEQUENCE_1, 40, 3000);
+		readSequenceAuto(SEQUENCE_1, 40, 2000);
 		System.out.println("- - - press enter - - -");
 		CaveExplorer.in.nextLine();
-//		readSequenceAuto(SEQUENCE_2, 20, 1000);
+		readSequenceAuto(SEQUENCE_2, 20, 1000);
+		Thread.sleep(1000);
 		if (CaveExplorer.useLaunchpadInput) {
 //			Launchpad.clearPads(Launchpad.launchpad, 15, 0);
 //			new Thread() {
@@ -57,6 +61,7 @@ public class GameStart implements Playable {
 //	            	}
 //	            }.start();               
 		}
+		System.out.print("\n\n\n");
 	}
 	
 	public static void readSequence(String[] seq, long charDelay) throws InterruptedException, InvalidMidiDataException, MidiUnavailableException{
